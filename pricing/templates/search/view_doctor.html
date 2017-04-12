@@ -1,0 +1,61 @@
+{% extends '_layouts/base_portal.html' %}
+{% load static %}
+
+{% block title %}View Doctor{% endblock title %}
+
+
+{% block content %}
+<section>
+    {% include '_includes/header_divider.html' with header=doctor.get_full_name %}
+
+	<div class="container margin-top-30">
+	    <div class="row">
+	        <div class="col-sm-12 col-md-12 col-lg-12">
+
+	            <div class="products products-grid-wrapper">
+	                
+	                <!-- BACK -->
+	                <!-- <div id="breadcrumb">
+	                        <ol class="breadcrumb">
+	                            <li>
+	                                {#{% include '_includes/href/view_doctors_by_procedure.html' %}#}
+	                                <i class="fa fa-arrow-left"></i>
+	                                Back</a>
+	                            </li>
+	                        </ol>
+	                </div> -->
+
+	                <!-- BASIC INFORMATION -->
+	                <div class="row">
+	                    
+	                    <div class="col-lg-9 col-md-9 col-sm-8">
+	                        {% include '_includes/doctor_info_basic.html' with show_reviews=False %}
+	                    </div>
+	                    <div class="col-lg-3 col-md-3 col-sm-4">
+	                        <a href="{% url 'request_appointment' %}">
+	                        	<button class="btn btn-primary btn-lg">Request an Appointment</button>
+	                        </a><br><br>
+	                        <a href="{% url 'request_more_info' %}">
+	                        	<button class="btn btn-primary btn-lg btn-outline">Want More Information?</button>
+	                        </a><br>
+	                    </div>                    
+	                </div>
+
+	                <!-- ADDITIONAL INFORMATION -->
+	                <div class="row">
+	                    
+	                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">                        
+	                        {% include '_includes/doctor_info_detail.html' %}
+	                    </div>
+
+	                </div>
+	            </div>
+
+	        </div>
+	    </div>
+
+	    {% include '_includes/doctor_related.html' %}
+
+	</div>
+</section>
+{% endblock content %}

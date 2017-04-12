@@ -1,0 +1,129 @@
+{% load crispy_forms_tags %}
+
+<div class="product-details-left margin-top-50">
+    <div role="tabpanel" class="product-details">
+        
+        <nav>
+            <ul class="nav" role="tablist">
+                <li role="presentation" class="active">
+                    <a href="#product-description"  data-toggle="tab">Statement</a>
+                </li>
+
+                <li role="presentation">
+                    <a href="#product-procedures"  data-toggle="tab">Procedures & Prices</a>
+                </li>
+
+                <li role="presentation">
+                    <a href="#product-qualification"  data-toggle="tab">Qualifications</a>
+                </li>
+
+                <li role="presentation">
+                    <a href="#product-reviews"  data-toggle="tab">Reviews</span></a>
+                </li>                
+
+                <li role="presentation">
+                    <a href="#product-add-review"  data-toggle="tab">Add a Review</span></a>
+                </li>                
+            </ul><!-- /.nav -->
+        </nav><!-- /nav -->
+
+        <div class="tab-content">
+            
+            <div role="tabpanel" class="tab-pane active" id="product-description">
+                {% if doctor.comments %}
+                    <p>{{doctor.comments}}</p>
+                {% else %}
+                    -
+                {% endif %}
+            </div><!-- /.tab-pane -->
+
+            <div role="tabpanel" class="tab-pane" id="product-procedures">
+                <!-- {# <div class="table-responsive">
+                    <table class="table table-cart">
+                        <tbody> 
+                            <tr class="color light-gray">
+                                <td>NAME</td>
+                                <td>PRICE</td>
+                                <td>COMMENTS</td>
+                                <td>TELEMED?</td>
+                                <td>AVG. WAIT</td>
+                            </tr>
+
+                            {% for service in doctor.services.all %}
+                            <tr>
+                                <td class="cart-product">
+                                    {% include '_includes/href/view_doctor.html' %}
+                                    {{service.procedure.name}}
+                                    </a>
+                                </td> 
+                                <td>${{service.avg_price}}</td>
+                                <td>{{service.comments}}</td>
+                                <td>
+                                    {% if service.telemedicine_offered %}
+                                        <i class="fa fa-check"></i>
+                                    {% else %}
+                                        <i class="fa fa-times"></i>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if service.avg_wait_time %} 
+                                        {{service.avg_wait_time}} days
+                                    {% else %}
+                                        n/a
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div> #} -->                    
+
+                <h3>Procedures</h3>
+                <ul>
+                    {% for service in doctor.services.all %}
+                        <a href="{% url 'view_doctors_by_procedure' service.procedure.name|slugify service.procedure.pk %}" title="">
+                            <button class="btn btn-primary btn-outline btn-lg">
+                                {{service.procedure.name}} <br><br>
+                                ${{service.avg_price}}
+                            </button>
+                        </a>
+                    {% endfor %}                    
+                </ul>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="product-qualification">
+                <h3>Qualifications</h3>
+                <div class="row">
+                    {% include '_includes/qualifications.html' with qualification='Specialities' query=doctor.specialitys.all %}
+                    {% include '_includes/qualifications.html' with qualification='Education' query=doctor.educations.all %}
+                    {% include '_includes/qualifications.html' with qualification='Affiliations' query=doctor.affiliations.all %}
+                </div>
+                <div class="row">
+                    {% include '_includes/qualifications.html' with qualification='Languages' query=doctor.languages.all %}
+                    {% include '_includes/qualifications.html' with qualification='Certifications' query=doctor.certifications.all %}
+                    {% include '_includes/qualifications.html' with qualification='Awards' query=doctor.awards.all %}
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="product-reviews">
+                <h3>Reviews</h3>
+                {% include '_includes/doctor_reviews.html' with reviews=doctor.reviews.all %}
+            </div>
+
+            <div role="tabpanel" class="tab-pane" id="product-add-review">
+                <h3>Add a review</h3>
+
+                <form method="POST" >
+                {% csrf_token %}
+                    {% crispy doctor_review_form doctor_review_form.helper %}
+
+                    <div class="pull-right margin-bottom-30">
+                        <button type="submit" class="submit btn btn-lg btn-primary">Submit</button>
+                    </div>
+                </form><!-- /form -->
+
+            </div>
+            
+        </div>
+    </div><!-- /.tab-content -->
+</div><!-- /.product-details-left -->    

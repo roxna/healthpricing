@@ -1,0 +1,19 @@
+<div class="col-md-4 col-sm-6 item" style="left: 0px; top: 0px; padding-left: 0px;">
+    <div class="customer-block">                    
+        <div class="customers-say-customer">
+            <div class="customer-name">
+                <h3>{{qualification|upper}}</h3>
+            </div>
+        </div>
+        
+        <ul>
+            {% for i in query %}
+                <li>{{i}}</li>
+            {% empty %}
+                <small>
+                    <em>None</em>
+                </small>
+            {% endfor %}
+        </ul>
+    </div>
+</div>

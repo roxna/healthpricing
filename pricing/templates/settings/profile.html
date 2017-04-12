@@ -1,0 +1,71 @@
+{% extends '_layouts/base_portal.html' %}
+{% load static crispy_forms_tags %}
+
+{% block title %}Profile {% endblock title %}
+
+{% block css %}
+{% endblock css %}
+
+
+{% block content %}
+
+{% include '_includes/header_divider.html' with header='Profile' %}
+
+<section>
+    <div class="container">
+
+        <div class="row margin-top-30">
+        	<div class="col-md-12">
+	            <form method="POST" class="uniForm">
+	            {% csrf_token %}
+	                
+	                {% if user.buyer_profile %}
+
+	                <div class="row">
+		                <div class="col-sm-4 col-md-4 col-lg-4">
+		                	<h3 class="light">Your Information</h3>
+		                      {% crispy user_form user_form.helper %} 
+		                </div>
+
+		                <div class="col-sm-4 col-md-4 col-lg-4">
+		                	<h3 class="light">Company Information</h3>
+		                      {% crispy buyer_co_form buyer_co_form.helper2 %}
+		                </div>
+
+		                <div class="col-sm-4 col-md-4 col-lg-4">
+		                    <h3 class="light">Shipping Information</h3>
+		                      {% crispy address_form address_form.helper %}
+		                </div>
+	                </div>
+	                <div class="row">
+		                <div class="margin-bottom-10 center">
+		                    <button type="submit" class="btn btn-primary btn-lg">Update</button>
+		                </div>
+		            </div>
+
+		            {% else %}
+
+		            <div class="col-sm-2 col-md-2 col-lg-2"></div>
+		            <div class="col-sm-8 col-md-8 col-lg-8">
+		            	<div class="form-group">
+	                      {% crispy user_form user_form.helper %} 
+	                    </div>
+	                    <div class="margin-bottom-10 center">
+	                    	<button type="submit" class="btn btn-primary btn-lg">Update</button>
+	                	</div>
+	                </div>
+	                <div class="col-sm-2 col-md-2 col-lg-2"></div>
+	                
+		            {% endif %}
+	                
+	            </form>
+	        </div>
+        </div>              
+
+    </div>
+</section>
+{% endblock content %}
+
+
+{% block js %}
+{% endblock js %}  

@@ -1,0 +1,10 @@
+{% load pricing_filters %}
+
+{% if score != 'n/a' %}
+    {% for i in score|times %}
+        <span class="star"></span>
+    {% endfor %}
+    {% for i in 5|subtract:score|times %}
+        <span></span>
+    {% endfor %}
+{% endif %}

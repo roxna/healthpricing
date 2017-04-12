@@ -1,0 +1,26 @@
+{% extends '_layouts/base_portal.html' %}
+{% load static %}
+
+{% block title %} 404 - Page Not Found{% endblock title %}
+
+{% block content %}
+  <div class="error-404 background background-color-dark background-image-main-404">
+        <div class="fp-table">
+            <div class="fp-table-cell center">
+
+                <div class="container">
+                    <div class="margin-bottom-40">
+                        <h1><span class="page">page</span><span>404</span></h1>
+                        <h2>The Page not found</h2>
+                    </div>
+
+                    <p>
+                        <span>Please try one of the following pages</span>
+                        <a href="{% url 'home' %}" class="btn btn-lg btn-primary margin-left-10">Home Page</a>
+                    </p>
+                </div><!-- /.container -->
+
+            </div>
+        </div>
+    </div><!-- /.error-404 -->
+{% endblock content %}

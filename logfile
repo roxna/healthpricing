@@ -1,0 +1,65 @@
+LOG:  database system was shut down at 2017-04-07 07:38:54 PDT
+LOG:  MultiXact member wraparound protections are now enabled
+LOG:  database system is ready to accept connections
+LOG:  autovacuum launcher started
+FATAL:  database "healthpricing" does not exist
+ERROR:  syntax error at or near "ls" at character 1
+STATEMENT:  ls
+	drop database healthpricing;
+ERROR:  column pricing_user.gender does not exist at character 309
+STATEMENT:  SELECT "pricing_user"."id", "pricing_user"."password", "pricing_user"."last_login", "pricing_user"."is_superuser", "pricing_user"."username", "pricing_user"."first_name", "pricing_user"."last_name", "pricing_user"."email", "pricing_user"."is_staff", "pricing_user"."is_active", "pricing_user"."date_joined", "pricing_user"."gender" FROM "pricing_user" WHERE "pricing_user"."id" = 2
+ERROR:  column pricing_user.gender does not exist at character 309
+STATEMENT:  SELECT "pricing_user"."id", "pricing_user"."password", "pricing_user"."last_login", "pricing_user"."is_superuser", "pricing_user"."username", "pricing_user"."first_name", "pricing_user"."last_name", "pricing_user"."email", "pricing_user"."is_staff", "pricing_user"."is_active", "pricing_user"."date_joined", "pricing_user"."gender" FROM "pricing_user" WHERE "pricing_user"."id" = 2
+ERROR:  column pricing_user.gender does not exist at character 309
+STATEMENT:  SELECT "pricing_user"."id", "pricing_user"."password", "pricing_user"."last_login", "pricing_user"."is_superuser", "pricing_user"."username", "pricing_user"."first_name", "pricing_user"."last_name", "pricing_user"."email", "pricing_user"."is_staff", "pricing_user"."is_active", "pricing_user"."date_joined", "pricing_user"."gender" FROM "pricing_user" WHERE "pricing_user"."id" = 2
+ERROR:  column pricing_user.gender does not exist at character 309
+STATEMENT:  SELECT "pricing_user"."id", "pricing_user"."password", "pricing_user"."last_login", "pricing_user"."is_superuser", "pricing_user"."username", "pricing_user"."first_name", "pricing_user"."last_name", "pricing_user"."email", "pricing_user"."is_staff", "pricing_user"."is_active", "pricing_user"."date_joined", "pricing_user"."gender" FROM "pricing_user" WHERE "pricing_user"."id" = 2 LIMIT 21
+ERROR:  column pricing_user.gender does not exist at character 309
+STATEMENT:  SELECT "pricing_user"."id", "pricing_user"."password", "pricing_user"."last_login", "pricing_user"."is_superuser", "pricing_user"."username", "pricing_user"."first_name", "pricing_user"."last_name", "pricing_user"."email", "pricing_user"."is_staff", "pricing_user"."is_active", "pricing_user"."date_joined", "pricing_user"."gender" FROM "pricing_user" LIMIT 21
+ERROR:  column pricing_user.gender does not exist at character 309
+STATEMENT:  SELECT "pricing_user"."id", "pricing_user"."password", "pricing_user"."last_login", "pricing_user"."is_superuser", "pricing_user"."username", "pricing_user"."first_name", "pricing_user"."last_name", "pricing_user"."email", "pricing_user"."is_staff", "pricing_user"."is_active", "pricing_user"."date_joined", "pricing_user"."gender" FROM "pricing_user" WHERE "pricing_user"."id" = 2 LIMIT 21
+ERROR:  column pricing_user.gender does not exist at character 309
+STATEMENT:  SELECT "pricing_user"."id", "pricing_user"."password", "pricing_user"."last_login", "pricing_user"."is_superuser", "pricing_user"."username", "pricing_user"."first_name", "pricing_user"."last_name", "pricing_user"."email", "pricing_user"."is_staff", "pricing_user"."is_active", "pricing_user"."date_joined", "pricing_user"."gender" FROM "pricing_user" WHERE "pricing_user"."id" = 2 LIMIT 21
+ERROR:  column pricing_user.gender does not exist at character 309
+STATEMENT:  SELECT "pricing_user"."id", "pricing_user"."password", "pricing_user"."last_login", "pricing_user"."is_superuser", "pricing_user"."username", "pricing_user"."first_name", "pricing_user"."last_name", "pricing_user"."email", "pricing_user"."is_staff", "pricing_user"."is_active", "pricing_user"."date_joined", "pricing_user"."gender" FROM "pricing_user" WHERE "pricing_user"."id" = 2 LIMIT 21
+ERROR:  column pricing_user.gender does not exist at character 309
+STATEMENT:  SELECT "pricing_user"."id", "pricing_user"."password", "pricing_user"."last_login", "pricing_user"."is_superuser", "pricing_user"."username", "pricing_user"."first_name", "pricing_user"."last_name", "pricing_user"."email", "pricing_user"."is_staff", "pricing_user"."is_active", "pricing_user"."date_joined", "pricing_user"."gender" FROM "pricing_user" WHERE "pricing_user"."id" = 2
+ERROR:  null value in column "clinic_id" violates not-null constraint
+DETAIL:  Failing row contains (1, 98123, null).
+STATEMENT:  INSERT INTO "pricing_zipcode" ("code", "clinic_id") VALUES ('98123', NULL) RETURNING "pricing_zipcode"."id"
+ERROR:  relation "pricing_search" does not exist at character 13
+STATEMENT:  INSERT INTO "pricing_search" ("procedure_id", "zipcode_id", "source") VALUES (1, NULL, 1) RETURNING "pricing_search"."id"
+ERROR:  relation "pricing_search" does not exist at character 126
+STATEMENT:  SELECT "pricing_search"."id", "pricing_search"."procedure_id", "pricing_search"."zipcode_id", "pricing_search"."source" FROM "pricing_search" LIMIT 21
+ERROR:  column pricing_speciality.id does not exist at character 8
+STATEMENT:  SELECT "pricing_speciality"."id", "pricing_speciality"."name", "pricing_speciality"."doctor_id", "pricing_speciality"."is_primary" FROM "pricing_speciality" WHERE ("pricing_speciality"."doctor_id" = 2 AND "pricing_speciality"."is_primary" = true) LIMIT 1
+ERROR:  column pricing_speciality.id does not exist at character 8
+STATEMENT:  SELECT "pricing_speciality"."id", "pricing_speciality"."name", "pricing_speciality"."doctor_id", "pricing_speciality"."is_primary" FROM "pricing_speciality" WHERE ("pricing_speciality"."doctor_id" = 1 AND "pricing_speciality"."is_primary" = true) LIMIT 1
+ERROR:  column pricing_speciality.id does not exist at character 8
+STATEMENT:  SELECT "pricing_speciality"."id", "pricing_speciality"."name", "pricing_speciality"."doctor_id", "pricing_speciality"."is_primary" FROM "pricing_speciality" WHERE "pricing_speciality"."doctor_id" = 2 LIMIT 21
+ERROR:  column pricing_speciality.id does not exist at character 8
+STATEMENT:  SELECT "pricing_speciality"."id", "pricing_speciality"."name", "pricing_speciality"."doctor_id", "pricing_speciality"."is_primary" FROM "pricing_speciality" WHERE "pricing_speciality"."doctor_id" = 2 LIMIT 21
+ERROR:  column pricing_speciality.id does not exist at character 8
+STATEMENT:  SELECT "pricing_speciality"."id", "pricing_speciality"."name", "pricing_speciality"."doctor_id", "pricing_speciality"."is_primary" FROM "pricing_speciality" WHERE "pricing_speciality"."doctor_id" = 2 LIMIT 21
+ERROR:  column pricing_speciality.id does not exist at character 8
+STATEMENT:  SELECT "pricing_speciality"."id", "pricing_speciality"."name", "pricing_speciality"."doctor_id", "pricing_speciality"."is_primary" FROM "pricing_speciality" WHERE "pricing_speciality"."doctor_id" = 2 LIMIT 21
+ERROR:  column pricing_speciality.id does not exist at character 8
+STATEMENT:  SELECT "pricing_speciality"."id", "pricing_speciality"."name", "pricing_speciality"."doctor_id", "pricing_speciality"."is_primary" FROM "pricing_speciality" WHERE "pricing_speciality"."doctor_id" = 2 LIMIT 21
+ERROR:  column pricing_speciality.id does not exist at character 8
+STATEMENT:  SELECT "pricing_speciality"."id", "pricing_speciality"."name", "pricing_speciality"."doctor_id", "pricing_speciality"."is_primary" FROM "pricing_speciality" WHERE "pricing_speciality"."doctor_id" = 2 LIMIT 21
+ERROR:  column pricing_speciality.id does not exist at character 8
+STATEMENT:  SELECT "pricing_speciality"."id", "pricing_speciality"."name", "pricing_speciality"."doctor_id", "pricing_speciality"."is_primary" FROM "pricing_speciality" WHERE "pricing_speciality"."doctor_id" = 2 LIMIT 21
+ERROR:  column pricing_speciality.id does not exist at character 8
+STATEMENT:  SELECT "pricing_speciality"."id", "pricing_speciality"."name", "pricing_speciality"."doctor_id", "pricing_speciality"."is_primary" FROM "pricing_speciality" WHERE "pricing_speciality"."doctor_id" = 2 LIMIT 21
+ERROR:  column pricing_review.service_id does not exist at character 141
+STATEMENT:  SELECT "pricing_review"."id", "pricing_review"."title", "pricing_review"."comments", "pricing_review"."date", "pricing_review"."doctor_id", "pricing_review"."service_id", "pricing_review"."author_id", "pricing_review"."service_quality_score", "pricing_review"."price_transparency_score" FROM "pricing_review" WHERE "pricing_review"."doctor_id" = 2
+ERROR:  column pricing_review.service_id does not exist at character 141
+STATEMENT:  SELECT "pricing_review"."id", "pricing_review"."title", "pricing_review"."comments", "pricing_review"."date", "pricing_review"."doctor_id", "pricing_review"."service_id", "pricing_review"."author_id", "pricing_review"."service_quality_score", "pricing_review"."price_transparency_score" FROM "pricing_review" WHERE "pricing_review"."doctor_id" = 2 LIMIT 21
+ERROR:  column pricing_review.service_id does not exist at character 141
+STATEMENT:  SELECT "pricing_review"."id", "pricing_review"."title", "pricing_review"."comments", "pricing_review"."date", "pricing_review"."doctor_id", "pricing_review"."service_id", "pricing_review"."author_id", "pricing_review"."service_quality_score", "pricing_review"."price_transparency_score" FROM "pricing_review" WHERE "pricing_review"."doctor_id" = 2 LIMIT 21
+ERROR:  column pricing_review.service_id does not exist at character 141
+STATEMENT:  SELECT "pricing_review"."id", "pricing_review"."title", "pricing_review"."comments", "pricing_review"."date", "pricing_review"."doctor_id", "pricing_review"."service_id", "pricing_review"."author_id", "pricing_review"."service_quality_score", "pricing_review"."price_transparency_score" FROM "pricing_review" WHERE "pricing_review"."doctor_id" = 2 LIMIT 21
+LOG:  received smart shutdown request
+LOG:  autovacuum launcher shutting down
+LOG:  shutting down
+LOG:  database system is shut down

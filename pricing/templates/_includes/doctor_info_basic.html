@@ -1,0 +1,91 @@
+{% load static pricing_filters %}
+
+<div class="product product-list">
+    
+    <div class="product-media">
+        <div class="product-thumbnail">
+            {% include '_includes/href/view_doctor.html' %}
+                <img src="{{ doctor.image_url }}" alt="" class="current">
+            </a>
+        </div>        
+
+         {% if doctor.is_verified %}
+         <span class="product-label hot">
+            <span>Verified</span>
+        </span>
+        {% endif %}
+    </div>
+
+    <div class="product-body">
+        <h2 class="product-name">
+            {% include '_includes/href/view_doctor.html' %}
+                {{doctor.get_full_name}}
+            </a>
+        </h2>
+        <div class="product-category">
+            <span> -
+                {% for specialty in doctor.specialtys.all %}
+                   {{specialty}} - 
+                {% endfor %}
+            </span>
+        </div>
+
+        
+
+        <div class="product-price">        
+            <span class="amount">
+                <!-- If on procedure page - show price for procedure -->
+                {% if procedure_specific %}
+                    ${% get_avg_service_price doctor procedure %}
+                    <div class="product-category">
+                        <span> all incl. SELF-PAY CASH price </span>
+                    </div>    
+                <!-- Else show consultation fee -->
+                {% else %}
+                    {% if doctor.consultation_fee == 0 %}
+                        Free
+                    {% else %}
+                        ${{doctor.consultation_fee}} 
+                        <div class="product-category">
+                            <span> initial consultation </span>
+                        </div>
+                    {% endif %}
+                {% endif %}                
+            </span>
+        </div>
+        
+
+        <div class="product-stars">
+            <span class="rating">
+                {% include '_includes/stars.html' with score=doctor.get_review_score %}
+        </div>
+
+        {% if show_reviews %}
+        <div class="product-description">
+            {% with doctor.reviews.latest.comments as review_comments %}
+                {% if review_comments %}
+                    <p><em>"{{review_comments}}"</em></p>
+                {% endif %}
+            {% endwith %}
+        </div>
+        {% endif %}
+
+        {% if show_address %}
+        <div class="product-meta product-category">            
+            <p>
+                {% with doctor.clinics.latest as clinic %}
+                    <!-- Show address of most recently added clinic, if address is provided -->
+                    {% if clinic.address1 %}
+                        {{clinic.address1}},
+                        {{clinic.address2}} <br>
+                        {{clinic.city}}, {{clinic.state}} <br>
+                    {% endif %}
+                {% endwith %}
+            </p>
+        </div>
+        {% endif %}
+
+    </div>
+
+
+</div>

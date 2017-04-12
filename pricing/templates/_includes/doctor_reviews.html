@@ -1,0 +1,42 @@
+
+    <ol class="product-review-list">
+        {% if reviews|length == 0 %}
+            <div class="review-comment">No reviews yet</div>
+        {% else %}
+            {% for review in reviews %}
+            <li>
+                <h4 class="review-title">
+                    {{review.title}}
+                    <button class="btn btn-primary btn-outline alignright">{{review.service}}</button>
+                </h4>
+                <div class="rating small">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Service Quality</td> 
+                                    <td>{% include '_includes/stars.html' with score=review.service_quality_score %} </td>
+                                    <td>Price Transparency</td> 
+                                    <td>{% include '_includes/stars.html' with score=review.price_transparency_score %}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="review-comment">
+                    <p>{{review.comments}}</p>
+                </div>
+
+                <div class="review-meta">
+                    {% if review.author %}
+                        <span>Posted by</span>
+                        <a href="#" class="author">{{review.author}}</a>
+                        <span>-</span>
+                    {% endif %}
+                    <span><em>{{review.date}}</em></span>
+                </div>
+            </li>
+            {% endfor %}
+        {% endif %}
+    </ol>

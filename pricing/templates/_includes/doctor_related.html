@@ -1,0 +1,13 @@
+<div class="relared-products">
+    <div class="relared-products-header margin-bottom-50">
+        <h3 class="upper">Other Doctors</h3>
+    </div>
+
+    {% for doctor in related_doctors %}
+        <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+            {% include '_includes/doctor_info_basic.html' with show_address=False %}
+        </div>        
+    {% empty %}
+        <small><em>No related doctors</em></small>
+    {% endfor %}
+</div>
