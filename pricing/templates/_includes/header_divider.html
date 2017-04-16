@@ -1,6 +1,16 @@
 <div class="main-header main-header-light">
     <div class="container text-left">
-        <h1 class="upper">{{header}}</h1>
+        <h1 class="upper">{{header}}
+        	{% if image %}
+        		<div class="alignright margin-bottom-0">
+                    <div class="product-image">
+                        <img src="{{procedure.image_url}}" alt="" style="height: 75px;">
+                    </div>
+                </div>
+        	{% endif %}
+        </h1>
         <h3 class="light">{{subheader}}</h3>
+
+        
     </div>
 </div>

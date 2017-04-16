@@ -43,6 +43,7 @@ admin.site.register(Clinic, ClinicAdmin)
 admin.site.register(Zipcode, CityStateZipCountryAdmin)
 admin.site.register(City, CityStateZipCountryAdmin)
 admin.site.register(State, CityStateZipCountryAdmin)
+admin.site.register(Country, CityStateZipCountryAdmin)
 admin.site.register(Service, ServiceAdmin)
 
 class LeadAdmin(admin.ModelAdmin):
@@ -53,4 +54,22 @@ class ReviewAdmin(admin.ModelAdmin):
 
 admin.site.register(Lead, LeadAdmin)
 admin.site.register(Review, ReviewAdmin)
+
+
+class AuthorAdmin(admin.ModelAdmin):
+   list_display = ['id', 'name'] 
+
+class BlogAdmin(admin.ModelAdmin):
+   list_display = ['id', 'title', 'author'] 
+
+class ContactRequestAdmin(admin.ModelAdmin):
+   list_display = ['id', 'topic', 'author'] 
+
+class TestimonialAdmin(admin.ModelAdmin):
+   list_display = ['id', 'title', 'author'] 
+
+admin.site.register(Author, AuthorAdmin)
+# admin.site.register(Blog, BlogAdmin)
+admin.site.register(ContactRequest, ContactRequestAdmin)
+admin.site.register(Testimonial, TestimonialAdmin)
 

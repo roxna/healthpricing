@@ -17,11 +17,13 @@ class RegisterUserForm(UserCreationForm):
     
     def __init__(self, *args, **kwargs):
         super(RegisterUserForm, self).__init__(*args, **kwargs)
+        for fieldname in ['username', 'password1', 'password2']:
+            self.fields[fieldname].help_text = None
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Div(
-                Div('firstname', css_class='col-md-6'),
-                Div('lastname', css_class='col-md-6'),
+                Div('first_name', css_class='col-md-6'),
+                Div('last_name', css_class='col-md-6'),
                 css_class='row',
             ), 
             Div(
@@ -39,7 +41,7 @@ class RegisterUserForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("username", "email", "password1", "password2")
+        fields = ("first_name", "last_name", "username", "email", "password1", "password2")
 
     def clean_username(self):        
         username = self.cleaned_data["username"]
@@ -59,9 +61,44 @@ class RegisterUserForm(UserCreationForm):
             user.save()
         return user
 
+class LoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+  
+# Didn't use Django UserChangeForm because that requires PW
+class ChangeUserForm(ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(ChangeUserForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.fields['username'].help_text = None
+        self.helper.layout = Layout(
+            # Field('username', css_class='form-control', readonly=True),
+            # Field('email', css_class='form-control', readonly=True),
+            Div(
+                Div('first_name', css_class='col-md-6'),
+                Div('last_name', css_class='col-md-6'),
+                css_class='row',
+            ),             
+            Div(
+                Div('username', css_class='col-md-6'),
+                Div('email', css_class='col-md-6'),
+                css_class='row',
+            ), 
+        )
+        self.helper.form_tag = False
+
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name', 'email',)
+
 class DoctorProfileForm(ModelForm):  
     username = forms.CharField(required=False, label='Personal Statement') 
     image = forms.ImageField(required=False, label='Photograph') 
+    comments = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':60}))
 
     def __init__(self, *args, **kwargs):
         super(DoctorProfileForm, self).__init__(*args, **kwargs)
@@ -69,15 +106,18 @@ class DoctorProfileForm(ModelForm):
         self.helper.form_tag = False
         self.helper.layout = Layout(
             Div(
-                Div('title', css_class='col-md-8'),
-                Div('years_experience', css_class='col-md-4'),
+                Div('title', css_class='col-md-6'),
+                Div('years_experience', css_class='col-md-6'),
                 css_class='row',
             ),
             Div(
-                Div('comments', css_class='col-md-8'),
-                Div('image', css_class='col-md-4'),
+                Div('comments', css_class='col-md-12'),
                 css_class='row',
-            ),            
+            ),      
+            Div(
+                Div('image', css_class='col-md-6'),
+                css_class='row',
+            ),                   
         )
 
     class Meta:
@@ -89,10 +129,6 @@ class SearchServiceForm(ModelForm):
         required=True,
         queryset=Procedure.objects.all(),
         widget=autocomplete.ModelSelect2(url='procedure-autocomplete')) 
-    # zipcode = forms.ModelChoiceField(
-    #     required=True,
-    #     queryset=Zipcode.objects.all(),
-    #     widget=autocomplete.ModelSelect2(url='zipcode-autocomplete')) 
     city = forms.ModelChoiceField(
         required=True,
         queryset=City.objects.all(),
@@ -106,8 +142,8 @@ class SearchServiceForm(ModelForm):
             Div(
                 Div('procedure', css_class='col-md-7'),
                 Div('city', css_class='col-md-3'),
-                Submit('submit', 'Search', css_class='col-md-2 btn btn-primary btn-lg margin-top-25'),
-                css_class='row',
+                Submit('search', 'Search', css_class='col-md-2 btn btn-primary btn-lg margin-top-25'),
+                # css_class='row',
             ),          
         )
 
@@ -145,3 +181,101 @@ class ReviewForm(ModelForm):
     class Meta:
         model = Review
         fields = ("title", "service", "comments", "service_quality_score", "price_transparency_score")
+
+class LeadForm(ModelForm):
+    comments = forms.CharField(required=False, help_text='Describe your condition, severity, urgency etc', 
+        max_length=500, widget=forms.Textarea(attrs={'rows':3, 'cols':60}))
+
+    def __init__(self, *args, **kwargs):
+        super(LeadForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout(
+            Div(                
+                Div('service', css_class='col-md-12'),
+                Div('comments', css_class='col-md-12'),
+                css_class='row',
+            ),
+        )
+
+    class Meta:
+        model = Lead
+        fields = ("service", "comments",)
+
+
+
+###################################
+###            WEBSITE          ### 
+###################################
+
+class ContactRequestForm(ModelForm):
+    topic = forms.ChoiceField(conf_settings.CONTACT_TOPICS, required=True)
+    comments = forms.CharField(required=False, widget=forms.Textarea())
+
+    def __init__(self, *args, **kwargs):
+        super(ContactRequestForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout(
+            Div(                
+                Div('topic', css_class='col-md-12'),
+                Div('comments', css_class='col-md-12'),
+                css_class='row',
+            ),
+        )
+
+    class Meta:
+        model = ContactRequest
+        fields = ('topic', 'comments')   
+
+
+class AuthorForm(ModelForm):
+    name = forms.CharField(max_length=40, required=True)
+    company = forms.CharField(required=False, max_length=50)
+    email = forms.EmailField(max_length=254)
+
+    def __init__(self, *args, **kwargs):
+        super(AuthorForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout(
+            Div(                
+                Div('name', css_class='col-md-12'),
+                css_class='row',
+            ),
+            Div(                
+                Div('company', css_class='col-md-6'),
+                Div('email', css_class='col-md-6'),
+                css_class='row',
+            ),            
+        )        
+
+    class Meta:
+        model = Author
+        fields = ('name', 'company', 'email')
+
+class NewsletterForm(ModelForm):
+    email = forms.EmailField(max_length=254)
+
+    def __init__(self, *args, **kwargs):
+        super(NewsletterForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout(
+            Div(                
+                Div('email', css_class='col-md-12'),
+                css_class='row',
+            ),
+        )
+
+    def save(self, commit=True):
+        if self.clean():
+            instance = super(NewsletterForm, self).save(commit=False)
+            instance.source = 4
+            if commit:
+                instance.save()
+            return instance
+
+    class Meta:
+        model = Author
+        fields = ('email',)

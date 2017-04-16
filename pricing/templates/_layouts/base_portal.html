@@ -1,4 +1,4 @@
-{% load static humanize %}
+{% load static humanize pricing_filters crispy_forms_tags %}
 
 <!DOCTYPE html>
 <html class="no-js" lang="">
@@ -71,13 +71,14 @@
         <div id="wrapper" class="main-wrapper ">
 
             <header id="header" class="awe-menubar-header">
-                <nav class="headroom" data-responsive-width="1200">
-                    <div class="container margin-top-10">
+                <nav class="headroom headroom-fixed" data-responsive-width="1200">
+                    <div class="container margin-top-10" style="height: 80px;">
                         <div class="awemenu-container">
 
-                            <div class="navbar-header">
+                            <div class="navbar-header" style="width: 680px;">
                                 <ul class="navbar-icons">
-                                    
+
+
                                     <!-- USER ACCOUNT DETAILS / LOG IN -->
                                     <li class="menubar-account">
                                         {% if not user.is_anonymous %}
@@ -85,18 +86,15 @@
                                             <i class="icon icon-user-circle center"><h4>{{user.username}}</h4></i>
                                             
                                         </a>
-                                        <ul class="submenu megamenu">
+                                        <ul class="submenu megamenu" style="margin-left: 75px;">
                                             <li>
                                                 <div class="container-fluid">
                                                     <div class="header-account">
                                                         <ul>
-                                                            <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
                                                             {% if user.user_profile %}
-                                                                <li><a href="{% url 'user_appointments' %}">Appointments</a></li>
-                                                                <li><a href="{% url 'user_profile' %}">Profile</a></li>
+                                                                <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
                                                             {% elif user.doctor_profile %}
-                                                                <li><a href="{% url 'doctor_appointments' %}">Appointments</a></li>
-                                                                <li><a href="{% url 'doctor_profile' %}">Profile</a></li>
+                                                                <li><a href="{% url 'doctor_dashboard' %}">Dashboard</a></li>
                                                             {% endif %}
                                                             <li><a href="{% url 'logout' %}">Logout</a></li>
                                                         </ul>
@@ -115,13 +113,23 @@
                                     </li> 
                                     <!-- /. user account details / log in -->
 
+                                    
+                                    <li class="menubar-cart" style="width: 570px;">
+                                    {% if request.path != '/' %}
+                                        <form method="POST" action="{% url 'search_form' request.path %}">
+                                        {% csrf_token %}
+                                            {% crispy search_form search_form.helper %}
+                                            <!-- Search button in crispy_form layout --> 
+                                        </form>
+                                    {% endif %}
+                                    </li>
                                 </ul>
 
                             </div>
 
                             <div class="awe-logo">
                                 <a href="{% url 'home' %}" title=""><img src="{% static 'img/logo.png' %}" alt=""></a>
-                            </div><!-- /.awe-logo -->                    
+                            </div>
 
                         </div>
                     </div><!-- /.container -->
@@ -130,7 +138,7 @@
             </header>
                     
 
-            <div id="main" class="margin-top-100">          
+            <div id="main" class="margin-top-80">          
                 {% include "_includes/messages.html" with messages=messages %}
 
                 {% block content %} 
@@ -160,8 +168,10 @@
                                         <h3 class="widget-title">CAN WE HELP?</h3>
                              
                                         <div class="widget-content">
-                                                <p>{{SETTINGS.COMPANY_PHONE}}</p>
-                                                <p>{{SETTINGS.COMPANY_EMAIL}}</p>
+                                            <ul>
+                                                <li><a>{{SETTINGS.COMPANY_PHONE}}</a></li>
+                                                <li><a>{{SETTINGS.COMPANY_EMAIL}}</a></li>
+                                            </ul>
                                         </div><!-- /.widget -->
 
                                     </div> 
@@ -173,9 +183,16 @@
                                         <ul>
                                             {% for procedure in DATA.COMMON_PROCEDURES|slice:"6" %}
                                             <li>
-                                                {% include '_includes/href/view_doctors_by_procedure.html' %} {{procedure.name}}</a>
+                                                <a href="{% url 'view_doctors_by_procedure' procedure.name|slugify procedure.pk %}?{% url_replace request max_price=-1 review_score=-1 gender=-1 %}" title="">
+                                                 {{procedure.name}}</a>
                                             </li>
                                             {% endfor %}
+                                            <li>
+                                                <small class="text-muted"><em>---- or ----</em></small>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'directory' %}">VIEW ALL DOCTORS</a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div>
@@ -186,9 +203,17 @@
                                         <ul>
                                             {% for specialty in DATA.ALL_SPECIALTIES|slice:"6" %}
                                             <li>
-                                                {% include '_includes/href/view_doctors_by_specialty.html' %} {{specialty.name}}</a>
+                                                <a href="{% url 'view_doctors_by_specialty' specialty.slug %}" title=""> 
+                                                    {{specialty.name}}
+                                                </a>
                                             </li>
                                             {% endfor %}
+                                            <li>
+                                                <small class="text-muted"><em>---- or ----</em></small>
+                                            </li>
+                                            <li>
+                                                <a href="{% url 'directory' %}">VIEW ALL DOCTORS</a>
+                                            </li>
                                         </ul>
                                     </div>                                            
                                 </div>
@@ -207,10 +232,8 @@
                                         <h3 class="widget-title">Connect with Us</h3>
 
                                         <ul class="list-socials">
-                                            <!-- <li><a href="#" title=""><i class="icon icon-twitter"></i></a></li> -->
-                                            <li><a href="#" title=""><i class="icon icon-facebook"></i></a></li>
-                                            <!-- <li><a href="#" title=""><i class="icon icon-google-plus"></i></a></li> -->
-                                            <!-- <li><a href="#" title=""><i class="icon icon-pinterest"></i></a></li> -->
+                                            <li><a href="#" title=""><i class="icon icon-twitter"></i></a></li>
+                                            <li><a href="#" title=""><i class="icon icon-facebook"></i></a></li> 
                                         </ul>
                                     </div>
                                 </div>                                

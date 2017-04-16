@@ -356,6 +356,10 @@ img {
   margin-top: 10px !important;
 }
 
+.margin-bottom-0 {
+  margin-bottom: 00px !important;
+}
+
 .margin-bottom-10 {
   margin-bottom: 10px !important;
 }
@@ -6201,6 +6205,7 @@ h2.entry-title {
 .subscribe-title {
   margin: 0;
   text-transform: uppercase;
+  color: #ffa200;
 }
 
 .subscribe-comment {
@@ -6389,6 +6394,7 @@ h2.entry-title {
   margin-bottom: 0;
   font-size: 40px;
   text-transform: uppercase;
+  color: #ffa200;
 }
 
 .section-header h2.medium {
@@ -6648,6 +6654,7 @@ h2.entry-title {
 .customers-carousel h4 {
   margin-top: 0;
   margin-bottom: 40px;
+  color: #ffa200;
 }
 
 .customers-carousel p {
@@ -7224,6 +7231,12 @@ h2.entry-title {
   right: 0;
 }
 
+.headroom-fixed{
+  height: 80px;
+  background-color: #fff;
+  border-bottom: solid 1px #e1e1e1;
+}
+
 .headroom--pinned {
   -webkit-transform: translateY(0%);
       -ms-transform: translateY(0%);
@@ -7289,20 +7302,22 @@ h2.entry-title {
 
 .navbar-icons > li,
 .navbar-search > li {
-  float: left;
+  float: right;
 }
 
 .navbar-icons > li > a,
 .navbar-search > li > a {
   display: inline-block;
-  padding: 0 15px;
+  /*padding: 0 15px;*/
+  padding-left: 60px;
+  padding-top: 10px;
   height: 80px;
   line-height: 80px;
 }
 
 .navbar-icons > li .submenu,
 .navbar-search > li .submenu {
-  /*position: absolute;*/
+  position: absolute;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -8527,7 +8542,7 @@ h2.entry-title {
 .table-cart thead > tr > th,
 .table-cart thead > tr > td {
   background-color: #e2e1e1;
-  padding-left: 25px;
+  /*padding-left: 25px;*/
   padding-right: 25px;
 }
 
@@ -8536,7 +8551,7 @@ h2.entry-title {
 .table-cart tbody > tr > td {
   /*text-align: center;*/
   /*vertical-align: middle;*/
-  padding: 20px 25px;
+  padding: 8px 8px;
 }
 
 .table-cart tfoot .pull-right .btn, .table-cart tfoot .pull-right .search-submit {
@@ -8631,7 +8646,7 @@ h2.entry-title {
 }*/
 
 .select2-container .select2-selection--single{
-  height: 40px !important;
+  height: 35px !important;
 }
 .select2-container{
   min-width: 100% !important;

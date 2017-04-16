@@ -1,8 +1,83 @@
 {% extends '_layouts/base_portal.html' %}
-{% load static %}
+{% load static crispy_forms_tags %}
 
 {% block title %}Contact Us{% endblock title %}
 
 {% block content %}
 	{% include '_includes/header_divider.html' with header='Contact Us' %}
+	
+	<form method="POST">
+	{% csrf_token %}
+
+	<div class="contact-wrapper">
+	    <div class="margin-bottom-100">
+	        <div class="container margin-top-30">
+	            <div class="row">
+	                
+	            	<!-- CONTACT FORM -->
+	                <div class="col-sm-12 col-md-8">
+	                    <div class="contact-content">
+	                        <div class="contact-form-heading">
+	                            <h2>REACH OUT</h2>
+	                            <p>Ping us and we will get back to you in 24 hours!</p>
+	                        </div>
+	                        <!-- /.contact-content -->
+
+	                        <div id="ajax-message"></div>
+	                        {% crispy author_form author_form.helper %}
+	                        {% crispy contact_form contact_form.helper %}	
+	                        <div class="pull-right margin-bottom-30">
+		                        <button type="submit" class="submit btn btn-lg btn-primary">Submit</button>
+		                    </div>
+	                        
+	                    </div>
+	                </div>
+	                
+	                <div class="col-sm-1 col-md-1"></div>
+
+	                <!-- INFORMATION -->
+	                <div class="col-sm-12 col-md-3">
+	                    <div class="contact-content">
+	                    	<div class="contact-form-heading">
+	                            <h2>CONNECT WITH US</h2>
+	                            <!-- <p>Ping us and we will get back to you in 24 hours!</p> -->
+	                        </div>
+
+	                        <div class="contact-header">
+	                            <div class="contact-image">
+	                                <!-- <img src="./img/samples/banners/contact/banner-contact-1.jpg" alt=""> -->
+	                            </div>
+	                            <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos <strong>dolores et quas molestias excepturi sint occaecati</strong> cupiditate non provident,
+	                                similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.</p>
+	                        </div>
+	                        <!-- /.contact-header -->
+
+	                        <div class="contact-block">
+	                            <h3>CONTACT INFORMATION</h3>
+
+	                            <dl class="dl-horizontal">
+	                                <dt>Address</dt>
+	                                <dd>{{SETTINGS.COMPANY_ADDRESS}}</dd><br>
+
+	                                <dt>Phone</dt>
+	                                <dd>{{SETTINGS.COMPANY_PHONE}}</dd><br>
+
+	                                <dt>Email</dt>
+	                                <dd>{{SETTINGS.COMPANY_EMAIL}}</dd><br>
+	                            </dl>
+	                        </div>
+	                        <!-- /.contact-block -->
+
+	                    </div>
+	                    <!-- /.contact-content -->
+	                </div>
+	                <!-- /.col-md-6 -->
+	            </div>
+	            <!-- /.row -->
+	        </div>
+	        <!-- /.container -->
+	    </div>
+	    <!-- /.margin-bottom-100 -->
+	</div>
+	</form>
 {% endblock content %}

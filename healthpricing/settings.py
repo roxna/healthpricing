@@ -69,8 +69,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 # Custom template processors in processors.py
-                'pricing.processors.settings',
-                'pricing.processors.data',
+                'pricing.processors.settings_processor',
+                'pricing.processors.data_processor',
+                'pricing.processors.forms_processor',
             ],
         },
     },
@@ -110,7 +111,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'pricing.User'
 LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/dashboard/user/'
+DOCTOR_LOGIN_REDIRECT_URL = '/dashboard/doctor/'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
@@ -142,7 +144,12 @@ CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 COUNTRIES = ((1, 'USA'), )
 SCORE_CHOICES = ((1,'Really Bad'), (2,'Below Average'), (3,'Average'), (4,'Above Average'), (5,'Amazing'))
-
+CONTACT_TOPICS = (
+    (1, 'How Does It Work?'),
+    (2, 'Booking Appointments'),
+    (3, 'Partnerships'),
+    (0, 'Other'),
+)
 
 try: 
     from local_settings import * 

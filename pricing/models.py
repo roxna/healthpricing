@@ -3,13 +3,9 @@ from __future__ import unicode_literals
 from django.conf import settings as conf_settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.staticfiles.templatetags.staticfiles import static
-# from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator, MinValueValidator
 from django.db import models
-# from django.db.models import Avg
-# from django.template.defaultfilters import slugify
 from django.utils import timezone
-# import os
 import numpy as np
 
 ###################################
@@ -22,15 +18,9 @@ def doctor_img_directory_path(instance, filename):
 
 class User(AbstractUser):
     # Already has username, firstname, lastname, email, is_staff, is_active, date_joined
-	GENDER_CHOICES = (
-		# (-1, 'Unknown'),
-		# (0, 'Any'),
-		(1, 'Male'),
-		(2, 'Female'),
-	)
-	gender = models.IntegerField(choices=GENDER_CHOICES, null=True, blank=True)
+    pass
 
-	def __unicode__(self):
+    def __unicode__(self):
 		return self.username	
 
 class UserProfile(models.Model):	
@@ -41,8 +31,16 @@ class UserProfile(models.Model):
 
 class DoctorProfile(models.Model):	
 	user = models.OneToOneField(User, related_name="doctor_profile")
-	title = models.CharField(max_length=30) #eg. MD (Dr. John Doe, MD)
-	consultation_fee = models.IntegerField(validators=[MinValueValidator(0)])
+	title = models.CharField(max_length=30, null=True, blank=True) #eg. MD (Dr. John Doe, MD)
+	practice_name = models.CharField(max_length=50, null=True, blank=True) #eg. Bluedot Dental
+	GENDER_CHOICES = (
+		# (-1, 'Unknown'),
+		# (0, 'Any'),
+		(1, 'Male'),
+		(2, 'Female'),
+	)
+	gender = models.IntegerField(choices=GENDER_CHOICES, null=True, blank=True)
+	consultation_fee = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
 	comments = models.CharField(max_length=500, null=True, blank=True)
 	image = models.ImageField(upload_to=doctor_img_directory_path, default='defaults/profile_pic.jpg', blank=True, null=True)
 	years_experience = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
@@ -72,6 +70,9 @@ class DoctorProfile(models.Model):
 			for review in self.reviews.all():
 				total_score += review.overall_score
 			return total_score/num_reviews
+
+	def get_primary_clinic(self):
+		return self.clinics.latest()
 
 # Parent model for Specialties, Education, Hospital Affiliations, Languages, Board Certifications, Awards
 class Qualification(models.Model):
@@ -109,9 +110,14 @@ class Award(Qualification):
 ###      CLINIC / SERVICES      ### 
 ################################### 
 
+# File will be uploaded to MEDIA_ROOT/<procedure-name>/<filename>
+def procedure_img_directory_path(instance, filename):
+	return 'procedures/{0}/{1}'.format(instance.slug, filename)
+
 class Procedure(models.Model):
 	name = models.CharField(max_length=30)  #eg. Root Canal
 	slug = models.CharField(max_length=30, default='')  #eg. root-canal
+	image = models.ImageField(upload_to=procedure_img_directory_path, default='defaults/procedure.jpeg', blank=True, null=True)
 	category = models.CharField(max_length=30)  #eg. Dental/Vision/Labs etc
 	subcategory = models.CharField(max_length=30)  #eg. Cavities/Orthodontics etc
 	cpt_code = models.CharField(max_length=30, null=True, blank=True)
@@ -128,6 +134,13 @@ class Procedure(models.Model):
 			prices.append(service.avg_price) 
 		return int(np.percentile(prices, n))
 
+ 	@property
+	def image_url(self):
+	    if self.image and hasattr(self.image, 'url'):
+	        return self.image.url
+	    else:
+	    	return 'defaults/procedure.jpg'
+
 
 class CityStateZipCountry(models.Model):
 	name = models.CharField(max_length=20, default='')
@@ -139,21 +152,22 @@ class CityStateZipCountry(models.Model):
 	def __unicode__(self):
 		return self.name	
 
-class Neighborhood(CityStateZipCountry):
-	pass
-
-class City(CityStateZipCountry):
-	pass
-
-class State(CityStateZipCountry):
-	pass
-
-class Zipcode(CityStateZipCountry):
-	pass
-
 class Country(CityStateZipCountry):
 	pass
 	# name = models.IntegerField(choices=conf_settings.COUNTRIES, null=True, blank=True)		
+
+class State(CityStateZipCountry):
+	country = models.ForeignKey(Country, related_name='states')
+
+class City(CityStateZipCountry):
+	state = models.ForeignKey(State, related_name='cities')
+
+class Neighborhood(CityStateZipCountry):
+	city = models.ForeignKey(City, related_name='neighborhoods')
+
+class Zipcode(CityStateZipCountry):
+	city = models.ForeignKey(City, related_name='zipcodes')
+
 
 class Clinic(models.Model):	
 	name = models.CharField(max_length=30)
@@ -179,7 +193,13 @@ class Clinic(models.Model):
 		try:
 			return int(Clinic.objects.aggregate(Avg('reviews'))['reviews__avg']) + 1
 		except:
-			return 0   
+			return 0  
+
+	def get_address_line1(self):
+		return "{}, {}".format(self.address1, self.address2)
+
+	def get_address_line2(self):
+		return "{}, {} {}".format(self.city, self.state, self.zipcode)
 
 
 # Specific Service Offering from a Specific Clinic/Doctor for a selected Procedure
@@ -214,7 +234,7 @@ class Review(models.Model):
 	doctor = models.ForeignKey(DoctorProfile, related_name="reviews")
 	service = models.ForeignKey(Service, related_name="reviews")
 	# Add a field for Clinic being reviewed?
-	author = models.ForeignKey(UserProfile, related_name="reviews", null=True, blank=True)	
+	user = models.ForeignKey(UserProfile, related_name="reviews", null=True, blank=True)	
 	service_quality_score = models.IntegerField(choices=conf_settings.SCORE_CHOICES)
 	price_transparency_score = models.IntegerField(choices=conf_settings.SCORE_CHOICES)
 	overall_score = models.IntegerField(choices=conf_settings.SCORE_CHOICES, default=5)
@@ -233,7 +253,8 @@ class Review(models.Model):
 
 class Lead(models.Model):
 	date_requested = models.DateTimeField(default=timezone.now)
-	service = models.ForeignKey(Service, related_name='leads', null=True, blank=True)
+	comments = models.CharField(max_length=250, null=True, blank=True)
+	service = models.ForeignKey(Service, related_name='leads')
 	user = models.ForeignKey(UserProfile, related_name='leads')
 	doctor = models.ForeignKey(DoctorProfile, related_name='leads')
 	LEAD_TYPES = (
@@ -250,10 +271,49 @@ class Search(models.Model):
 	procedure = models.ForeignKey(Procedure, related_name='searches', null=True, blank=True)
 	city = models.ForeignKey(City, related_name='searches', null=True, blank=True)
 	zipcode = models.ForeignKey(Zipcode, related_name='searches', null=True, blank=True)
-	SOURCE_CHOICES = (
-		(1, 'Home Page'),
-		(2, 'xx'),
-	)
-	source = models.IntegerField(choices=SOURCE_CHOICES)
+	source = models.CharField(max_length=50, default='/')
 
 
+###################################
+###            WEBSITE          ### 
+###################################
+
+class Author(models.Model):
+	name = models.CharField(max_length=40, null=True, blank=True)
+	SOURCES = ((1, 'Blog'), (2, 'Testimonial'), (3, 'Contact Form'), (4, 'Newsletter'))
+	source = models.IntegerField(choices=SOURCES, default=2)
+	title = models.CharField(max_length=40, null=True, blank=True)
+	company = models.CharField(max_length=50, null=True, blank=True)
+	email = models.EmailField(max_length=254, null=True, blank=True)	
+
+	def __unicode__(self):
+		return "{}".format(self.name)
+
+class Blog(models.Model):
+	title = models.CharField(max_length=100)
+	summary = models.TextField()
+	content = models.TextField()	
+	date = models.DateField(default=timezone.now)
+	image = models.ImageField(blank=True, null=True)  # No upload_to here because it would go into MEDIA_ROOT instead of being served from static_files
+	author = models.ForeignKey(Author, related_name="blogs")
+
+	def __unicode__(self):
+		return "{}".format(self.title)
+
+class ContactRequest(models.Model):
+	topic = models.IntegerField(choices=conf_settings.CONTACT_TOPICS, default=0)
+	author = models.ForeignKey(Author, related_name="contact_requests")		
+	date = models.DateTimeField(default=timezone.now)
+	comments = models.TextField(null=True, blank=True)
+
+	def __unicode__(self):
+		return "{}({})".format(self.topic, self.author.name)
+
+class Testimonial(models.Model):
+	title = models.CharField(max_length=40, null=True, blank=True)
+	comments = models.CharField(max_length=250)
+	author = models.ForeignKey(Author, related_name="testimonials")
+	date = models.DateTimeField(default=timezone.now)        
+
+	def __unicode__(self):
+		return "{}".format(self.title)

@@ -38,46 +38,6 @@
             </div><!-- /.tab-pane -->
 
             <div role="tabpanel" class="tab-pane" id="product-procedures">
-                <!-- {# <div class="table-responsive">
-                    <table class="table table-cart">
-                        <tbody> 
-                            <tr class="color light-gray">
-                                <td>NAME</td>
-                                <td>PRICE</td>
-                                <td>COMMENTS</td>
-                                <td>TELEMED?</td>
-                                <td>AVG. WAIT</td>
-                            </tr>
-
-                            {% for service in doctor.services.all %}
-                            <tr>
-                                <td class="cart-product">
-                                    {% include '_includes/href/view_doctor.html' %}
-                                    {{service.procedure.name}}
-                                    </a>
-                                </td> 
-                                <td>${{service.avg_price}}</td>
-                                <td>{{service.comments}}</td>
-                                <td>
-                                    {% if service.telemedicine_offered %}
-                                        <i class="fa fa-check"></i>
-                                    {% else %}
-                                        <i class="fa fa-times"></i>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if service.avg_wait_time %} 
-                                        {{service.avg_wait_time}} days
-                                    {% else %}
-                                        n/a
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div> #} -->                    
-
                 <h3>Procedures</h3>
                 <ul>
                     {% for service in doctor.services.all %}
@@ -111,16 +71,20 @@
             </div>
 
             <div role="tabpanel" class="tab-pane" id="product-add-review">
-                <h3>Add a review</h3>
-
-                <form method="POST" >
-                {% csrf_token %}
+                {% if user.is_authenticated and user.user_profile %}  
+                    <h3>Add a review</h3>                            
                     {% crispy doctor_review_form doctor_review_form.helper %}
-
                     <div class="pull-right margin-bottom-30">
-                        <button type="submit" class="submit btn btn-lg btn-primary">Submit</button>
+                        <button type="submit" name='doctor_review_form' class="submit btn btn-lg btn-primary">Submit</button>
                     </div>
-                </form><!-- /form -->
+                {% elif not user.is_authenticated %}
+                    <h3>Log In</h3>
+                    <h4>You must log in to add a review</h4>
+                    {% crispy login_form_review login_form_review.helper %}
+                    <div class="pull-right margin-bottom-30">
+                        <button type="submit" name='login_form_review' class="submit btn btn-lg btn-primary">Submit</button>
+                    </div>
+                {% endif %}
 
             </div>
             

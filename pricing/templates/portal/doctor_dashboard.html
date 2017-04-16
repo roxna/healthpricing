@@ -1,0 +1,101 @@
+{% extends '_layouts/base_portal.html' %}
+{% load static crispy_forms_tags %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
+{% endblock css %}
+
+{% block content %}    
+    
+    <form method="POST">
+    {% csrf_token %}
+
+        <section class="elements-section">
+            <div class="container">
+
+                <div class="margin-bottom-30">
+                    <h2 class="light upper center spacing-5">
+                        <img src="{{doctor.image_url}}" alt="" style="height: 75px;"/>
+                    </h2>
+                </div>
+
+                <div role="tabpanel">
+
+                    <div class="awe-nav-responsive">
+                        <ul class="awe-nav" role="tablist">
+                            <li role="presentation" class="active">
+                                <a href="#appt-requests" title="" aria-controls="appt-requests" role="tab" data-toggle="tab" aria-expanded="false">
+                                    <i class="fa fa-calendar">&nbsp;</i> Appointment Requests
+                                </a>
+                            </li>
+
+                            <li role="presentation" class="">
+                                <a href="#settings" title="" aria-controls="settings" role="tab" data-toggle="tab" aria-expanded="false">
+                                    <i class="fa fa-gear">&nbsp;</i>Settings
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="row no-margin">
+                        <div class="col-md-12">
+
+                            <div class="tab-content padding-top-25">
+
+                                <div role="tabpanel" class="tab-pane fade active in" id="appt-requests">
+                                    <div class="">
+                                       <table class="table table-cart" id="appt-requests-table">
+                                           <thead>
+                                                <tr>
+                                                   <th width="20%">User</th>
+                                                   <th width="20%">Procedure</th>
+                                                   <th width="30%">Comments</th>
+                                                   <th width="15%">Price</th>
+                                                   <th width="15%">Requested</th>
+                                                </tr>
+                                           </thead>
+                                           <tbody>
+                                               {% for req in appt_requests %}
+                                               <tr>
+                                                   <td width="20%">{{req.user.user.username}}</td>
+                                                   <td width="20%">{{req.service.procedure.name}}</td>
+                                                   <td width="30%">{{req.comments}}</td>
+                                                   <td width="15%">${{req.service.avg_price}}</td>
+                                                   <td width="15%">{{req.date_requested|date}}</td>
+                                               </tr>
+                                               {% endfor %}
+                                           </tbody>
+                                       </table>
+                                    </div>
+                                </div>
+                                
+
+                                <div role="tabpanel" class="tab-pane fade" id="settings">
+                                    <div class="text-muted">
+                                        <div class="row">
+                                            <h4> Basic Information <h4>
+                                            {% crispy user_form user_form.helper %}
+
+                                            <h4> Professional Information <h4>
+                                            {% crispy doctor_profile_form doctor_profile_form.helper %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- /.tab-content -->
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </form>
+{% endblock content %}
+
+{% block js %}
+  {% include "_includes/data_tables.html" with tableID='appt-requests-table' %}
+{% endblock js %}

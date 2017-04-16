@@ -27,10 +27,11 @@ def subtract(value, arg):
 # To add query parameters to URL 
 # or replace it with new value if it's there
 @register.simple_tag
-def url_replace(request, field, value):
-    dict_ = request.GET.copy()
-    dict_[field] = value
-    return dict_.urlencode()
+def url_replace(request, **kwargs):
+    updated_url = request.GET.copy()
+    for field, value in kwargs.items():
+    	updated_url[field] = value
+    return updated_url.urlencode()
 
 #####################
 #   MODEL METHODS   #

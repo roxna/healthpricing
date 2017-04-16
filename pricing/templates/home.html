@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<section>
+<section>    
     <div class="main-slider-wrapper">
         <div class="main-slider owl-carousel owl-carousel-inset"> 
             <div class="main-slider-item">
@@ -19,13 +19,11 @@
                             <div class="container">
                                 <h3 class="text white">Don't know what your treatment will cost?</h3><br>
                                 <h2 class="text white">Find out Now</h2>
-
-                                <!-- SEARCH -->
-                                <form method="POST">
+                                    <form method="POST">
                                     {% csrf_token %}
-                                    {% crispy search_form search_form.helper %}
-                                </form>
-                                <!-- /.search -->                                
+                                        {% crispy search_form search_form.helper %}
+                                        <!-- Search button in crispy_form layout --> 
+                                    </form>
                             </div>
                         </div>
                     </div>
@@ -38,75 +36,76 @@
         $(function() {  aweMainSlider(); });
     </script>
 
-    </section><!-- /section -->
+</section><!-- /section -->
 
     
   
 
-    {% include '_includes/about.html' %}
+{% include '_includes/about.html' %}
 
-    <section class="background background-color-dark background-image-section-customers-say">
-        <div class="container">
-            <div class="padding-top-60">
-                <div class="section-header center">
-                    <h2>Customers Say</h2>
-                </div><!-- /.section-header -->
-
-                <div class="section-customers">
-                    <div class="row">
-                        <div class="col-md-8 col-md-offset-2">
-                            <div class="customers-carousel owl-carousel" id="customers-carousel" data-toggle="carousel" data-dots="true" data-nav="0">
-                                <!-- {#{% for testimonial in testimonials %}
-                                    {% include '_includes/testimonial.html' %}
-                                {% endfor %} #}-->
-
-                            </div><!-- /.customers-say-carousel -->
-                        </div>
-                    </div>
-                </div><!-- /.section-content -->
-            </div>
-        </div><!-- /.container -->
-
-    </section><!-- /section -->
-
+<section class="background background-color-dark background-image-section-customers-say">
     <div class="container">
-        <div class="divider"></div>
-    </div>
+        <div class="padding-top-60">
+            <div class="section-header center">
+                <h2>Customers Say</h2>
+            </div><!-- /.section-header -->
 
-    <!-- <section>
-        <div class="container">
-            <div class="margin-bottom-50">
-                <div class="subscible-wrapper subscible-inline">
-                    
-                    <div class="row">
+            <div class="section-customers">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <div class="customers-carousel owl-carousel" id="customers-carousel" data-toggle="carousel" data-dots="true" data-nav="0">
+                            {% for testimonial in testimonials %}
+                                {% include '_includes/testimonial.html' %}
+                            {% endfor %}
+                            <div class="owl-nav disabled">
+                                <div class="owl-prev">prev</div>
+                                <div class="owl-next">next</div>
+                            </div>
+                        </div><!-- /.customers-say-carousel -->
+                    </div>
+                </div>
+            </div><!-- /.section-content -->
+        </div>
+    </div><!-- /.container -->
+
+</section><!-- /section -->
+
+<div class="container">
+    <div class="divider"></div>
+</div>
+
+<section>
+    <div class="container">
+        <div class="margin-bottom-50">
+            <div class="subscible-wrapper subscible-inline">
+                
+                <div class="row">
+                    <form method="POST">
+                        {% csrf_token %}
                         <div class="col-md-2">
-                            <h3 class="subscribe-title">Subscribe newsletter</h3>
+                            <h3 class="subscribe-title">Subscribe</h3>
                         </div>
 
                         <div class="col-md-4">
                             <div class="subscribe-comment">
-                                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry</p>
+                                <p>Want discounts, tips on staying healthy and deals with gyms? Subscribe now!</p>
                             </div>
                         </div>
-
-                        <div class="col-md-6">
-                            <form method="GET" class="subscible-form">
-                                <div class="form-group">
-                                    <label class="sr-only" for="subscribe-email">Email</label>
-                                    <input type="email" placeholder="Enter your email address" class="form-control" id="subscribe-email">
-                                </div>
-
-                                <div class="form-submit">
-                                    <button class="btn btn-lg btn-primary" type="submit">Subscribe email</button>
-                                </div>
-                            </form>
+                        
+                        <div class="col-md-4">
+                            {% crispy newsletter_form newsletter_form.helper %}
                         </div>
-                    </div>
 
+                        <div class="col-md-2 pull-right margin-top-20">
+                            <button type="submit" name="newsletter" class="submit btn btn-lg btn-primary">Submit</button>
+                        </div>
+                    </form>
                 </div>
+
             </div>
         </div>
-    </section> -->
+    </div>
+</section>
 
 
 {% endblock content %}

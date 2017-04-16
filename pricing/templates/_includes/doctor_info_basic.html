@@ -34,30 +34,38 @@
 
         <div class="product-price">        
             <span class="amount">
-                <!-- If on procedure page - show price for procedure -->
-                {% if procedure_specific %}
-                    ${% get_avg_service_price doctor procedure %}
-                    <div class="product-category">
-                        <span> all incl. SELF-PAY CASH price </span>
-                    </div>    
-                <!-- Else show consultation fee -->
-                {% else %}
-                    {% if doctor.consultation_fee == 0 %}
-                        Free
-                    {% else %}
-                        ${{doctor.consultation_fee}} 
-                        <div class="product-category">
-                            <span> initial consultation </span>
-                        </div>
-                    {% endif %}
-                {% endif %}                
+        <!-- If on procedure page - show price for procedure -->
+        {% if procedure_specific %}
+            ${% get_avg_service_price doctor procedure %}
             </span>
         </div>
+        <div class="product-category">
+            <small> all incl. <b>self-pay cash</b> price <br>
+            for <b>{{procedure.name}}</b></small>
+        </div>    
+        
+        <!-- Else show consultation fee -->
+        {% else %}
+            {% if doctor.consultation_fee == 0 %}
+                Free        
+            {% else %}
+                ${{doctor.consultation_fee}} 
+            </span>
+        </div>
+        <div class="product-category">
+            <span> initial consultation </span>
+        </div>
+            {% endif %}
+        {% endif %}                
+        
         
 
         <div class="product-stars">
             <span class="rating">
                 {% include '_includes/stars.html' with score=doctor.get_review_score %}
+                <span class="product-status">
+                    <small>({{doctor.reviews.all|length}} reviews)</small>
+                </span>
         </div>
 
         {% if show_reviews %}

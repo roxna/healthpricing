@@ -1,0 +1,57 @@
+{% extends '_layouts/base_portal.html' %}
+{% load static %}
+
+{% block title %}Directory{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
+{% endblock css %}
+
+{% block content %}    
+	
+	{% include '_includes/header_divider.html' with header='Doctor Directory' %}
+
+    <section class="elements-section">
+        <div class="container">      	
+
+            <div class="row">
+                <div class="col-md-12">
+
+                   <table class="table table-cart" id="appt-requests-table">
+                       <thead>
+                            <tr>
+                               <th width="30%">DOCTOR</th>
+                               <th width="15%">GENDER</th>
+                               <th width="15%">INITIAL FEE</th>
+                               <th width="40%">CLINIC</th>
+                            </tr>
+                       </thead>
+                       <tbody>
+                           {% for doctor in DATA.ALL_DOCTORS %}
+                           <tr>
+                               <th width="30%">
+                                    <a href="{% url 'view_doctor' doctor.get_full_name|slugify doctor.pk %}">
+                                        {{doctor.get_full_name}}
+                                    </a>
+                                </th>
+                               <th width="15%">{{doctor.get_gender_display}}</th>
+                               <th width="15%">${{doctor.consultation_fee}}</th>
+                               <th width="40%">
+                               		{{doctor.get_primary_clinic.get_address_line1}} <br>
+                               		{{doctor.get_primary_clinic.get_address_line2}}
+                               </th>
+                           </tr>
+                           {% endfor %}
+                       </tbody>
+                   </table>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock content %}
+
+{% block js %}
+  {% include "_includes/data_tables.html" with tableID='appt-requests-table' %}
+{% endblock js %}
