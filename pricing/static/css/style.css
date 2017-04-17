@@ -2,7 +2,7 @@
 @import url(http://fonts.googleapis.com/css?family=Montserrat:400);
 body {font-family: 'Open Sans',sans-serif;}
 html {background: none repeat scroll 0 0 #FFFFFF;font-size: 100%;}
-body, div, span, h1, h2, h3, h4, h5, h6, p, em, a, img, strong, sub, b, u, i, ul, li, form, label {background: none repeat scroll 0 0 rgba(0, 0, 0, 0);border: 0 none;font-size: 100%;margin: 0;outline: 0 none;padding: 0;vertical-align: baseline;}
+body, div, span, h1, h2, h3, h4, h5, h6, p, em, a, img, strong, sub, b, u, i, ul, li, form, label {background: none repeat scroll 0 0 rgba(0, 0, 0, 0);border: 0 none;font-size: 99%;margin: 0;outline: 0 none;padding: 0;vertical-align: baseline;}
 a:active, a:hover, a:focus, input:active, button:active, button, textarea:focus, input:focus {
     outline: 0 none;
 }

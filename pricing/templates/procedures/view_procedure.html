@@ -1,0 +1,123 @@
+{% extends '_layouts/base_portal.html' %}
+{% load static %}
+
+{% block title %}Procedure-{{procedure.name}}{% endblock title %}
+
+
+{% block content %}
+<section>
+    {% include '_includes/header_divider.html' with header=procedure.name %}
+    
+    <form method="POST" novalidate>
+    {% csrf_token %}
+
+      <div class="container margin-top-30">
+          <div class="row border-bottom">
+
+              <!-- DOCTORS BUTTON -->
+              <div class="row alignright margin-right-30">
+                  <a href="{% url 'view_doctors_by_procedure' procedure.slug %}">
+                    <button class="btn btn-primary btn-outline btn-lg">
+                      Explore doctors
+                    </button>
+                  </a>
+              </div>
+
+              <div class="row">
+                <!-- BASIC INFORMATION -->
+                <div class="col-md-6">
+                    <div class="products products-grid-wrapper">
+
+                      <div class="box box-default">     
+
+                        <div class="box-header">
+                            <h3 class="box-title">{{procedure.name}}</h3>
+                        </div>
+
+                         <div class="product-body">
+                            <div class="product-category">
+                                <span> {{procedure.desc}}
+                                </span>
+                            </div>
+                          </div>
+
+                      </div>
+
+                    </div>
+                </div>  
+
+                <!-- CHART FOR PRICE COMPARISON -->
+                <div class="col-md-6 margin-bottom-30">
+                    <div class="products products-grid-wrapper">
+                      <div class="box box-default">     
+
+                        <div class="box-header">
+                            <h3 class="box-title">Pricing Chart</h3>
+                        </div>       
+                      
+                        <div class="box-body">
+                            <canvas id="pricingChart" height="250" width="450"></canvas>
+                        </div>        
+
+                      </div> 
+                    </div>
+                </div>        
+              </div>
+
+          </div>
+
+          {% include '_includes/doctor_related.html' %}
+
+      </div>
+
+  </form>
+</section>
+{% endblock content %}
+
+{% block js %}
+  <script src="{% static 'plugins/chartjs/Chart.min.js' %}"></script>  
+  <script src="{% static 'plugins/chartjs/charts.js' %}"></script>  
+
+  <script type="text/javascript">
+
+    var pricingData = {
+      labels: ['Billed Price', 'Insurer Price', 'Free Market Price'],
+      datasets: [
+        {              
+            // label: "Pricing Comparison",
+            data: [{{procedure.billed_price}}, {{procedure.insurer_price}}, {{procedure.free_market_price}}],
+            backgroundColor: ['#ff8787', '#ff8787', '#ff8787'],
+        },                
+      ]
+    };
+    var pricingOptions = {
+      scales: {
+           xAxes: [{
+                stacked: true,
+           }],
+           yAxes: [{
+                stacked: true
+           }]
+        },
+        legend: {
+          display: false
+        },
+        tooltips: {
+          callbacks: {
+            label: function(tooltipItem) {
+              return tooltipItem.yLabel;
+            },
+          },
+        },
+    }
+
+    // Pass in data/options and generate chart
+    var pricingCtx = $("#pricingChart").get(0).getContext("2d");
+    var pricingChart = new Chart(pricingCtx, {
+      type: 'bar',
+      data: pricingData,
+      options: pricingOptions,
+    });
+  </script>
+
+{% endblock js %}

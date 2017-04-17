@@ -1,0 +1,54 @@
+{% extends '_layouts/base_portal.html' %}
+{% load static %}
+
+{% block title %}Directory{% endblock title %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static 'plugins/datatables/dataTables.bootstrap.css' %}">
+{% endblock css %}
+
+{% block content %}    
+	
+	{% include '_includes/header_divider.html' with header='Procedure Directory' %}
+
+    <section class="elements-section">
+        <div class="container">      	
+
+            <div class="row">
+                <div class="col-md-12">
+
+                   <table class="table table-cart" id="procedures-table">
+                       <thead>
+                            <tr>
+                               <th width="40%">PROCEDURE</th>
+                               <th width="35%">CATEGORY</th>
+                               <th width="25%">FREE MARKET PRICE</th>
+                            </tr>
+                       </thead>
+                       <tbody>
+                           {% for procedure in DATA.ALL_PROCEDURES %}
+                           <tr>
+                               <th width="40%">
+                                    <a href="{% url 'view_procedure' procedure.slug %}">
+                                      <button class="btn btn-primary btn-outline">
+                                        {{procedure.name}}
+                                      </button>
+                                    </a>
+                                </th>
+                               <th width="35%">{{procedure.category}}</th>
+                               <th width="25%">${{procedure.free_market_price}}</th>
+                           </tr>
+                           {% endfor %}
+                       </tbody>
+                   </table>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+{% endblock content %}
+
+{% block js %}
+  {% include "_includes/data_tables.html" with tableID='procedures-table' %}
+{% endblock js %}

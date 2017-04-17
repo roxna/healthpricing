@@ -1,6 +1,6 @@
 {% load crispy_forms_tags %}
 
-<div class="product-details-left margin-top-50">
+<div class="product-details-left margin-top-20">
     <div role="tabpanel" class="product-details">
         
         <nav>
@@ -41,7 +41,7 @@
                 <h3>Procedures</h3>
                 <ul>
                     {% for service in doctor.services.all %}
-                        <a href="{% url 'view_doctors_by_procedure' service.procedure.name|slugify service.procedure.pk %}" title="">
+                        <a href="{% url 'view_procedure' service.procedure.slug  %}" title="">
                             <button class="btn btn-primary btn-outline btn-lg">
                                 {{service.procedure.name}} <br><br>
                                 ${{service.avg_price}}

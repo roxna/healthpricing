@@ -17,11 +17,20 @@ def doctor_img_directory_path(instance, filename):
 	return 'doctor_profiles/{0}/{1}'.format(instance.user.username, filename)
 
 class User(AbstractUser):
-    # Already has username, firstname, lastname, email, is_staff, is_active, date_joined
-    pass
+	# Already has username, firstname, lastname, email, is_staff, is_active, date_joined
+	pass
 
-    def __unicode__(self):
-		return self.username	
+	def __unicode__(self):
+		return self.username
+
+	@property
+	def is_user(self):
+		return hasattr(self, 'user_profile')
+
+	@property
+	def is_doctor(self):
+		return hasattr(self, 'doctor_profile')
+
 
 class UserProfile(models.Model):	
 	user = models.OneToOneField(User, related_name="user_profile")		
@@ -110,20 +119,40 @@ class Award(Qualification):
 ###      CLINIC / SERVICES      ### 
 ################################### 
 
+# Eg. Dental/Vision/Labs etc
+class Category(models.Model):
+	name = models.CharField(max_length=30)
+
+	def __unicode__(self):
+		return self.name
+
+# Eg. Cavities/Orthodontics etc
+class Subcategory(models.Model):
+	name = models.CharField(max_length=30)
+
+	def __unicode__(self):
+		return self.name
+
 # File will be uploaded to MEDIA_ROOT/<procedure-name>/<filename>
 def procedure_img_directory_path(instance, filename):
 	return 'procedures/{0}/{1}'.format(instance.slug, filename)
 
+############# CAUTION  #############
+# DONT ADD A PROCEDURE IF THERE IS NO SERVICE #
+# Percentile function will kick up a fuss #
 class Procedure(models.Model):
 	name = models.CharField(max_length=30)  #eg. Root Canal
-	slug = models.CharField(max_length=30, default='')  #eg. root-canal
-	image = models.ImageField(upload_to=procedure_img_directory_path, default='defaults/procedure.jpeg', blank=True, null=True)
-	category = models.CharField(max_length=30)  #eg. Dental/Vision/Labs etc
-	subcategory = models.CharField(max_length=30)  #eg. Cavities/Orthodontics etc
+	slug = models.CharField(max_length=30)  #eg. root-canal
+	desc = models.CharField(max_length=500)
+	image = models.ImageField(upload_to=procedure_img_directory_path, default='defaults/procedure.jpeg', blank=True, null=True)	
 	cpt_code = models.CharField(max_length=30, null=True, blank=True)
+	category = models.ForeignKey(Category, related_name='procedures', null=True, blank=True)
+	subcategory = models.ForeignKey(Subcategory, related_name='procedures', null=True, blank=True)
 	# Acc to ACA, self-pay patients can't be charged more than Medicare patients.
-	# However, this price will vary by user's Zip/location
-	fair_price = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)  
+	# Caveat - these prices will vary by user's Zip/location
+	free_market_price = models.IntegerField(validators=[MinValueValidator(0)], default=0)
+	insurer_price = models.IntegerField(validators=[MinValueValidator(0)], default=0)  
+	billed_price = models.IntegerField(validators=[MinValueValidator(0)], default=0)  
 
 	def __unicode__(self):
 		return self.name
@@ -139,8 +168,7 @@ class Procedure(models.Model):
 	    if self.image and hasattr(self.image, 'url'):
 	        return self.image.url
 	    else:
-	    	return 'defaults/procedure.jpg'
-
+	    	return 'static/defaults/procedure.jpg'
 
 class CityStateZipCountry(models.Model):
 	name = models.CharField(max_length=20, default='')
@@ -254,6 +282,12 @@ class Review(models.Model):
 class Lead(models.Model):
 	date_requested = models.DateTimeField(default=timezone.now)
 	comments = models.CharField(max_length=250, null=True, blank=True)
+	STATUS_CHOICES = (
+		(1, 'Requested'),
+		(2, 'Cancelled'),
+		(3, 'Completed'),
+	)
+	status = models.IntegerField(choices=STATUS_CHOICES, default=1)
 	service = models.ForeignKey(Service, related_name='leads')
 	user = models.ForeignKey(UserProfile, related_name='leads')
 	doctor = models.ForeignKey(DoctorProfile, related_name='leads')

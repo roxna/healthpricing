@@ -15,11 +15,11 @@ from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404, resolve_url
-# from django.template import RequestContext
 from django.template.response import TemplateResponse
 from django.urls import reverse
 from django.utils.http import is_safe_url
 from django.utils.text import slugify
+from django.utils import timezone
 from dal import autocomplete  #django_auto_complete
 from pricing.forms import *
 from pricing.utils import *
@@ -163,9 +163,9 @@ def login(request, template_name='registration/login.html',
                 	redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)		   # dashboard/user/
                 elif hasattr(request.user, 'doctor_profile'):
                 	redirect_to = resolve_url(settings.DOCTOR_LOGIN_REDIRECT_URL)  # dashboard/doctor/
+            
             # Okay, security check complete. Log the user in.
             auth_login(request, form.get_user())
-
             return HttpResponseRedirect(redirect_to)
     else:
         form = authentication_form(request)
@@ -195,47 +195,17 @@ def terms(request):
 ###       DOCTORS / CLINICS      ### 
 ####################################
 
-def view_doctors_by_procedure(request, procedure_name, procedure_id):
-	procedure = get_object_or_404(Procedure, pk=procedure_id)	
+def doctor_directory(request):
+	return render(request, "doctors/doctor_directory.html")	
+
+def view_doctors_by_procedure(request, procedure_slug):
+	procedure = get_object_or_404(Procedure, slug=procedure_slug)	
 	services = Service.objects.filter(procedure=procedure)
-	doctors = DoctorProfile.objects.filter(services__in=services)
+	doctors = DoctorProfile.objects.filter(services__in=services).distinct('id')
 
 	if request.method == 'GET':
-		'''
-		Get the query parameters from the url
-		'''
-		city = request.GET.get('city')  				# city_slug
-		max_price = request.GET.get('max_price')		# -1=Undef
-		gender = request.GET.get('gender')  			# gender_int (1=M, 2=F, -1=Undef)
-		review_score = request.GET.get('review_score')	# min_num_stars
-		zipcode = request.GET.get('zipcode')
-
-		'''
-		Filter the doctor list based on the query parameters
-		'''
-		if city and city != '-1':   					# city = -1 --> all cities
-			city_obj = City.objects.filter(slug=city)
-			doctors = doctors.filter(clinics__city__in=city_obj)
-			zipcodes = Zipcode.objects.filter(city=city_obj)
-		else:
-			# If no city is selected in the filter, don't show the zipcode filter
-			zipcodes = None
-
-		if max_price and int(max_price) != -1:  		# max_price = -1 --> no max_price defined
-			doctors = doctors.filter(services__avg_price__lte=int(max_price))
-			
-		if zipcode and int(zipcode) != -1:
-			zipcode_obj = Zipcode.objects.filter(name=zipcode)
-			doctors = doctors.filter(clinics__zipcode__in=zipcode_obj)
-
-		if gender and int(gender) in [1, 2]:  #M(1) F(2)
-			doctors.filter(gender=int(gender))
-		
-		if review_score and int(review_score) in [3, 4, 5]:
-			# Get all doctors whose average review_scores are greater than requested
-			# TODO: REFINE / Not scaleable (doctors.annotate(review_score=Avg('reviews__overall_score')).filter(review_score__gte=int(review_score))?)
-			doctor_ids_with_review_score = [doctor.id for doctor in DoctorProfile.objects.all() if doctor.get_review_score() >= int(review_score)]
-			doctors.filter(id__in=doctor_ids_with_review_score)			
+		city, max_price, gender, review_score, zipcode = get_query_parameters(request)	
+		doctors, zipcodes = filter_doctors_by_query_parameters(doctors, city, max_price, gender, review_score, zipcode)
 
 	data = {
 		'procedure': procedure,
@@ -245,17 +215,25 @@ def view_doctors_by_procedure(request, procedure_name, procedure_id):
 		'zipcodes': zipcodes,
 		'percentile_list': [25, 50, 75],
 	}	
-	return render(request, "search/view_doctors_by_procedure.html", data)
+	return render(request, "doctors/view_doctors_by_procedure.html", data)
 
 def view_doctors_by_specialty(request, specialty_slug):
 	specialty = Specialty.objects.filter(slug=specialty_slug)	
-	doctors = DoctorProfile.objects.filter(specialtys__in=specialty)
+	doctors = DoctorProfile.objects.filter(specialtys__in=specialty).distinct('id')
+
+	if request.method == 'GET':
+		city, max_price, gender, review_score, zipcode = get_query_parameters(request)	
+		doctors, zipcodes = filter_doctors_by_query_parameters(doctors, city, max_price, gender, review_score, zipcode)
+
 	data = {
 		'specialty': specialty[0],
 		'doctors': doctors,
+
+		'cities': City.objects.all(),
+		'zipcodes': zipcodes,
 		'percentile_list': [25, 50, 75],
 	}	
-	return render(request, "search/view_doctors_by_specialty.html", data)
+	return render(request, "doctors/view_doctors_by_specialty.html", data)
 
 def view_doctor(request, doctor_name, doctor_id):
 	doctor = get_object_or_404(DoctorProfile, pk=doctor_id)
@@ -270,24 +248,17 @@ def view_doctor(request, doctor_name, doctor_id):
 	lead_form.fields['service'].queryset = Service.objects.filter(doctor=doctor)
 
 	if request.method == 'POST':
-		if 'login_form_appt' in request.POST:
-			# Authenticate and log in user
-			# Then redirect them to the same page
+		if 'login_form_appt' in request.POST:	
 			if login_form_appt.is_valid():
 				user = authenticate(username=login_form_appt.cleaned_data['username'], password=login_form_appt.cleaned_data['password'])
-				if user is not None:
-					login(request, user)
-					return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-				else:
-					messages.info(request, 'Invalid credentials')
+				log_user_in(request, user, error_msg='Invalid credentials')				
+				# Redirect user to the same page
+				return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 		elif 'login_form_review' in request.POST:
 			if login_form_review.is_valid():
 				user = authenticate(username=login_form_review.cleaned_data['username'], password=login_form_review.cleaned_data['password'])
-				if user is not None:
-					login(request, user)
-					return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-				else:
-					messages.info(request, 'Invalid credentials')
+				log_user_in(request, user, error_msg='Invalid credentials')
+				return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 		elif 'doctor_review_form' in request.POST:
 			# Only save review if user logged in, as a user (user_profile)
 			# ...and review_form is_valid
@@ -307,7 +278,7 @@ def view_doctor(request, doctor_name, doctor_id):
 				lead.lead_type = 2
 				lead.save()
 				messages.success(request, 'Request submitted successfully')
-				return redirect('dashboard')
+				return redirect('user_dashboard')
 	
 	# Show related doctors with the same specialties
 	specialtys = Specialty.objects.filter(doctor=doctor)
@@ -321,17 +292,45 @@ def view_doctor(request, doctor_name, doctor_id):
 		'lead_form': lead_form,
 		'related_doctors': related_doctors,
 	}	
-	return render(request, "search/view_doctor.html", data)
+	return render(request, "doctors/view_doctor.html", data)
 	
 
-def directory(request):
-	return render(request, "search/directory.html")
+####################################
+###          PROCEDURES          ### 
+####################################
+
+def view_procedure(request, procedure_slug):
+	procedure = get_object_or_404(Procedure, slug=procedure_slug)
+	related_doctors = DoctorProfile.objects.filter(services__in=procedure.services.all())
+	data = {
+		'procedure': procedure,
+		'related_doctors': related_doctors,
+	}
+	return render(request, "procedures/view_procedure.html", data)
+
+def procedure_directory(request):
+	return render(request, "procedures/procedure_directory.html")
+
+####################################
+###        REQUEST LEADS         ### 
+####################################
+
+def mark_request_as_cancelled(request, request_id):
+	return mark_request_as_x(request, request_id, status_int=2, message_text='Request marked as cancelled')
+
+def mark_request_as_completed(request, request_id):
+	return mark_request_as_x(request, request_id, status_int=3, message_text='Request marked as completed')
+
+def mark_request_as_new(request, request_id):
+	return mark_request_as_x(request, request_id, status_int=1, message_text='Request created', date_requested=timezone.now())
+
 
 ####################################
 ###      PROFILE / SETTINGS      ### 
 ####################################	
 
 @login_required()
+@user_passes_test(is_user)
 def user_dashboard(request):
 	user_form = ChangeUserForm(request.POST or None, instance=request.user)
 	user_profile = request.user.user_profile
@@ -341,10 +340,11 @@ def user_dashboard(request):
 		if user_form.is_valid():
 			user_form.save()
 			messages.success(request, "Profile updated successfully")
-			return redirect('dashboard')
+			return redirect('user_dashboard')
 		else:
 			messages.info(request, 'Error. Profile not updated')
 	data = {
+		'user': user_profile,
 		'appt_requests': appt_requests,
 		'reviews': reviews,
 		'user_form': user_form,
@@ -352,6 +352,7 @@ def user_dashboard(request):
 	return render(request, "portal/user_dashboard.html", data)	
 
 @login_required()
+@user_passes_test(is_doctor)
 def doctor_dashboard(request):
 	user_form = ChangeUserForm(request.POST or None, instance=request.user)
 	doctor_profile = request.user.doctor_profile

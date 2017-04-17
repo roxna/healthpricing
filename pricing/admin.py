@@ -35,10 +35,12 @@ class CityStateZipCountryAdmin(admin.ModelAdmin):
    list_display = ['id', 'name',]
 
 class ServiceAdmin(admin.ModelAdmin):
-   list_display = ['id', 'procedure', 'doctor', 'clinic', 'avg_price']         
+   list_display = ['id', 'procedure', 'doctor', 'clinic', 'avg_price']
 
 
 admin.site.register(Procedure, ProcedureAdmin)
+admin.site.register(Category, CityStateZipCountryAdmin)
+admin.site.register(Subcategory, CityStateZipCountryAdmin)
 admin.site.register(Clinic, ClinicAdmin)
 admin.site.register(Zipcode, CityStateZipCountryAdmin)
 admin.site.register(City, CityStateZipCountryAdmin)
@@ -47,7 +49,7 @@ admin.site.register(Country, CityStateZipCountryAdmin)
 admin.site.register(Service, ServiceAdmin)
 
 class LeadAdmin(admin.ModelAdmin):
-   list_display = ['id', 'service', 'user', 'doctor'] 
+   list_display = ['id', 'service', 'get_status_display', 'user', 'doctor'] 
 
 class ReviewAdmin(admin.ModelAdmin):
    list_display = ['id', 'title', 'comments'] 

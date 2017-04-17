@@ -17,7 +17,7 @@
             <div class="row">
                 <div class="col-md-12">
 
-                   <table class="table table-cart" id="appt-requests-table">
+                   <table class="table table-cart" id="doctors-table">
                        <thead>
                             <tr>
                                <th width="30%">DOCTOR</th>
@@ -29,10 +29,12 @@
                        <tbody>
                            {% for doctor in DATA.ALL_DOCTORS %}
                            <tr>
-                               <th width="30%">
-                                    <a href="{% url 'view_doctor' doctor.get_full_name|slugify doctor.pk %}">
-                                        {{doctor.get_full_name}}
-                                    </a>
+                               <th width="30%">                                  
+                                  <a href="{% url 'view_doctor' doctor.get_full_name|slugify doctor.pk %}">
+                                    <button class="btn btn-primary btn-outline">  
+                                      {{doctor.get_full_name}}
+                                    </button>
+                                  </a>                                  
                                 </th>
                                <th width="15%">{{doctor.get_gender_display}}</th>
                                <th width="15%">${{doctor.consultation_fee}}</th>
@@ -53,5 +55,5 @@
 {% endblock content %}
 
 {% block js %}
-  {% include "_includes/data_tables.html" with tableID='appt-requests-table' %}
+  {% include "_includes/data_tables.html" with tableID='doctors-table' %}
 {% endblock js %}

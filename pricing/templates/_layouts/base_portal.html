@@ -68,32 +68,30 @@
         <!-- // END LOADING -->
 
 
-        <div id="wrapper" class="main-wrapper ">
+        <div id="wrapper" class="main-wrapper">
 
             <header id="header" class="awe-menubar-header">
                 <nav class="headroom headroom-fixed" data-responsive-width="1200">
-                    <div class="container margin-top-10" style="height: 80px;">
+                    <div class="container margin-top-10">
                         <div class="awemenu-container">
 
-                            <div class="navbar-header" style="width: 680px;">
+                            <div class="navbar-header">
                                 <ul class="navbar-icons">
-
 
                                     <!-- USER ACCOUNT DETAILS / LOG IN -->
                                     <li class="menubar-account">
                                         {% if not user.is_anonymous %}
                                         <a href="#" title="" class="awemenu-icon">
                                             <i class="icon icon-user-circle center"><h4>{{user.username}}</h4></i>
-                                            
                                         </a>
-                                        <ul class="submenu megamenu" style="margin-left: 75px;">
+                                        <ul class="submenu megamenu margin-right-100">
                                             <li>
                                                 <div class="container-fluid">
                                                     <div class="header-account">
                                                         <ul>
-                                                            {% if user.user_profile %}
+                                                            {% if user.is_user %}
                                                                 <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
-                                                            {% elif user.doctor_profile %}
+                                                            {% elif user.is_doctor %}
                                                                 <li><a href="{% url 'doctor_dashboard' %}">Dashboard</a></li>
                                                             {% endif %}
                                                             <li><a href="{% url 'logout' %}">Logout</a></li>
@@ -103,7 +101,7 @@
                                             </li>
                                         </ul>
                                         {% else %}
-                                        <a href="{% url 'register_doctor' %}" title="List">
+                                        <a href="{% url 'register_doctor' %}" title="List" class="no-padding-top">
                                             <button class="btn btn-primary btn-outline btn-lg">List your practice</button>
                                         </a>   
                                         <a href="{% url 'register_user' %}" title="" class="awemenu-icon">
@@ -113,8 +111,7 @@
                                     </li> 
                                     <!-- /. user account details / log in -->
 
-                                    
-                                    <li class="menubar-cart" style="width: 570px;">
+                                    <li class="menubar-cart">
                                     {% if request.path != '/' %}
                                         <form method="POST" action="{% url 'search_form' request.path %}">
                                         {% csrf_token %}
@@ -127,7 +124,7 @@
 
                             </div>
 
-                            <div class="awe-logo">
+                            <div class="awe-logo" style="width: 50px;">
                                 <a href="{% url 'home' %}" title=""><img src="{% static 'img/logo.png' %}" alt=""></a>
                             </div>
 
@@ -155,6 +152,47 @@
                             <div class="row">
 
                                 <div class="col-md-3 col-sm-6">
+                                    <div class="widget">
+                                        <h3 class="widget-title">Doctors By Procedure</h3>
+                                        <ul>
+                                            {% for procedure in DATA.COMMON_PROCEDURES|slice:"6" %}
+                                            <li>
+                                                <a href="{% url 'view_doctors_by_procedure' procedure.slug %}?{% url_replace request city=-1 max_price=-1 review_score=-1 gender=-1 %}" title="">
+                                                 {{procedure.name}}</a>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3 col-sm-6">
+                                    <div class="widget">
+                                        <h3 class="widget-title">Doctors By Specialty</h3>
+                                        <ul>
+                                            {% for specialty in DATA.ALL_SPECIALTIES|slice:"6" %}
+                                            <li>
+                                                <a href="{% url 'view_doctors_by_specialty' specialty.slug %}?{% url_replace request city=-1 review_score=-1 gender=-1 %}" title=""> 
+                                                    {{specialty.name}}
+                                                </a>
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>                                            
+                                </div>
+
+                                <div class="col-md-3 col-sm-6">
+                                    
+                                    <div class="widget">
+                                        <h3 class="widget-title">DIRECTORIES</h3>
+                                        <ul>
+                                            <li><a href="{% url 'doctor_directory' %}">All Doctors</a></li>
+                                            <li><a href="{% url 'procedure_directory' %}">All Procedures</a></li>
+                                        </ul>
+
+                                    </div>
+                                </div>                                
+
+                                <div class="col-md-3 col-sm-6">
                                    <div class="widget">
                                         <h3 class="widget-title">Company</h3>
                                         <ul>
@@ -172,71 +210,14 @@
                                                 <li><a>{{SETTINGS.COMPANY_PHONE}}</a></li>
                                                 <li><a>{{SETTINGS.COMPANY_EMAIL}}</a></li>
                                             </ul>
+                                            <ul class="list-socials margin-top-10">
+                                                <li><a href="#" title=""><i class="icon icon-twitter"></i></a></li>
+                                                <li><a href="#" title=""><i class="icon icon-facebook"></i></a></li>
+                                            </ul>
                                         </div><!-- /.widget -->
 
                                     </div> 
                                 </div>
-
-                                <div class="col-md-3 col-sm-6">
-                                    <div class="widget">
-                                        <h3 class="widget-title">Search By Procedure</h3>
-                                        <ul>
-                                            {% for procedure in DATA.COMMON_PROCEDURES|slice:"6" %}
-                                            <li>
-                                                <a href="{% url 'view_doctors_by_procedure' procedure.name|slugify procedure.pk %}?{% url_replace request max_price=-1 review_score=-1 gender=-1 %}" title="">
-                                                 {{procedure.name}}</a>
-                                            </li>
-                                            {% endfor %}
-                                            <li>
-                                                <small class="text-muted"><em>---- or ----</em></small>
-                                            </li>
-                                            <li>
-                                                <a href="{% url 'directory' %}">VIEW ALL DOCTORS</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="col-md-3 col-sm-6">
-                                    <div class="widget">
-                                        <h3 class="widget-title">Search By Specialty</h3>
-                                        <ul>
-                                            {% for specialty in DATA.ALL_SPECIALTIES|slice:"6" %}
-                                            <li>
-                                                <a href="{% url 'view_doctors_by_specialty' specialty.slug %}" title=""> 
-                                                    {{specialty.name}}
-                                                </a>
-                                            </li>
-                                            {% endfor %}
-                                            <li>
-                                                <small class="text-muted"><em>---- or ----</em></small>
-                                            </li>
-                                            <li>
-                                                <a href="{% url 'directory' %}">VIEW ALL DOCTORS</a>
-                                            </li>
-                                        </ul>
-                                    </div>                                            
-                                </div>
-
-                                <div class="col-md-3 col-sm-6">
-                                    
-                                    <div class="widget">
-                                        <h3 class="widget-title">ABOUT</h3>
-
-                                        <div class="widget-content">
-                                            <p>Lorem ipsum dolor sit amet isse potenti. Vesquam ante aliquet lacusemper elit. Cras neque nulla, convallis non commodo et, euismod nonsese.</p>
-                                        </div>
-                                    </div>
-
-                                     <div class="widget">
-                                        <h3 class="widget-title">Connect with Us</h3>
-
-                                        <ul class="list-socials">
-                                            <li><a href="#" title=""><i class="icon icon-twitter"></i></a></li>
-                                            <li><a href="#" title=""><i class="icon icon-facebook"></i></a></li> 
-                                        </ul>
-                                    </div>
-                                </div>                                
 
                             </div>
                         </div><!-- /.container -->                 

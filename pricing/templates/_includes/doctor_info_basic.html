@@ -16,7 +16,7 @@
         {% endif %}
     </div>
 
-    <div class="product-body">
+     <div class="product-body">
         <h2 class="product-name">
             {% include '_includes/href/view_doctor.html' %}
                 {{doctor.get_full_name}}
@@ -40,8 +40,10 @@
             </span>
         </div>
         <div class="product-category">
-            <small> all incl. <b>self-pay cash</b> price <br>
-            for <b>{{procedure.name}}</b></small>
+            <small> 
+                all incl. self-pay cash price <br>
+                for <a href="{% url 'view_procedure' procedure.slug %}">{{procedure.name}}</a>
+            </small>
         </div>    
         
         <!-- Else show consultation fee -->
@@ -58,14 +60,13 @@
             {% endif %}
         {% endif %}                
         
-        
-
         <div class="product-stars">
             <span class="rating">
                 {% include '_includes/stars.html' with score=doctor.get_review_score %}
-                <span class="product-status">
-                    <small>({{doctor.reviews.all|length}} reviews)</small>
-                </span>
+            </span>
+            <span class="product-status">
+                <small>({{doctor.reviews.all|length}} reviews)</small>
+            </span>
         </div>
 
         {% if show_reviews %}

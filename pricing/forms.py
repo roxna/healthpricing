@@ -106,8 +106,9 @@ class DoctorProfileForm(ModelForm):
         self.helper.form_tag = False
         self.helper.layout = Layout(
             Div(
-                Div('title', css_class='col-md-6'),
-                Div('years_experience', css_class='col-md-6'),
+                Div('title', css_class='col-md-4'),
+                Div('years_experience', css_class='col-md-4'),
+                Div('gender', css_class='col-md-4'),
                 css_class='row',
             ),
             Div(
@@ -122,7 +123,7 @@ class DoctorProfileForm(ModelForm):
 
     class Meta:
         model = DoctorProfile
-        fields = ("title", "comments", "image", "years_experience") 
+        fields = ("title", "comments", "image", "years_experience", "gender") 
 
 class SearchServiceForm(ModelForm):
     procedure = forms.ModelChoiceField(
@@ -140,9 +141,9 @@ class SearchServiceForm(ModelForm):
         self.helper.form_tag = False
         self.helper.layout = Layout(
             Div(
-                Div('procedure', css_class='col-md-7'),
-                Div('city', css_class='col-md-3'),
-                Submit('search', 'Search', css_class='col-md-2 btn btn-primary btn-lg margin-top-25'),
+                Div('procedure', css_class='col-sm-6 col-md-6 col-lg-6'),
+                Div('city', css_class='col-sm-4 col-md-4 col-lg-4'),
+                Submit('search', 'Search', css_class='col-sm-2 col-md-2 col-lg-2 btn btn-primary btn-lg margin-top-20'),
                 # css_class='row',
             ),          
         )

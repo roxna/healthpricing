@@ -307,6 +307,10 @@ img {
   padding: 0px !important;
 }
 
+.no-padding-top{
+  padding-top: 0px !important;
+}
+
 .padding-5 {
   padding: 5px !important;
 }
@@ -2188,7 +2192,7 @@ img {
 
 .btn.btn-lg, .btn-lg.search-submit {
   font-size: 12px;
-  padding: 12px 25px;
+  padding: 10px 15px;
   letter-spacing: 1px;
 }
 
@@ -4314,7 +4318,7 @@ h2.entry-title {
 }
 
 .product {
-  margin-bottom: 50px;
+  /*margin-bottom: 50px;*/
 }
 
 .product-name {
@@ -6087,7 +6091,7 @@ h2.entry-title {
   font-weight: 700;
   text-transform: uppercase;
   margin-top: 0;
-  margin-bottom: 25px;
+  margin-bottom: 5px;
 }
 
 .footer-wrapper .widget ul {
@@ -6332,7 +6336,7 @@ h2.entry-title {
   color: #fff;
   background-color: #333;
   text-align: center;
-  padding: 20px 0;
+  padding: 10px 0;
 }
 
 .main-header-small {
@@ -7309,7 +7313,7 @@ h2.entry-title {
 .navbar-search > li > a {
   display: inline-block;
   /*padding: 0 15px;*/
-  padding-left: 60px;
+  padding-left: 30px;
   padding-top: 10px;
   height: 80px;
   line-height: 80px;
@@ -7335,7 +7339,7 @@ h2.entry-title {
 @media (max-width: 1200px) {
   .navbar-icons > li .submenu,
   .navbar-search > li .submenu {
-    left: 0;
+    /*left: 0;*/
     right: auto;
   }
 }
@@ -7406,10 +7410,10 @@ h2.entry-title {
   }
   .navbar-header {
     display: block;
-    float: none;
+    /*float: none;*/
     overflow: hidden;
     margin: 0 -15px;
-    border-bottom: solid 1px #e1e1e1;
+    /*border-bottom: solid 1px #e1e1e1;*/
   }
   .navbar-search {
     float: right;
@@ -8535,7 +8539,7 @@ h2.entry-title {
 .table-cart tr > th {
   border-color: #e2e1e1 !important;
   /*text-transform: uppercase;*/
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 400;
 }
 

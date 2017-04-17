@@ -36,18 +36,26 @@ urlpatterns = [
     url(r'^dashboard/user/$', pricing_views.user_dashboard, name='user_dashboard'),
     url(r'^dashboard/doctor/$', pricing_views.doctor_dashboard, name='doctor_dashboard'),    
 
-	###### DOCTOR / CLINIC LISTS ######
-	url(r'^doctors/procedure/(?P<procedure_name>[\w-]+)/(?P<procedure_id>[\d+]+)/$', pricing_views.view_doctors_by_procedure, name='view_doctors_by_procedure'),
+	###### DOCTORS ######
+	url(r'^doctors/directory/$', pricing_views.doctor_directory, name='doctor_directory'),
+    url(r'^doctors/procedure/(?P<procedure_slug>[\w-]+)/$', pricing_views.view_doctors_by_procedure, name='view_doctors_by_procedure'),
     url(r'^doctors/specialty/(?P<specialty_slug>[\w-]+)/$', pricing_views.view_doctors_by_specialty, name='view_doctors_by_specialty'),
 	url(r'^doctor/(?P<doctor_name>[\w-]+)/(?P<doctor_id>\d+)/$', pricing_views.view_doctor, name='view_doctor'),
 
-    ###### DIRECTORIES ######
-    url(r'^directory/$', pricing_views.directory, name='directory'),
+    ###### DIRECTORIES ######    
+    url(r'^procedures/directory/$', pricing_views.procedure_directory, name='procedure_directory'),
+    url(r'^procedures/(?P<procedure_slug>[\w-]+)/$', pricing_views.view_procedure, name='view_procedure'),        
+
+    ###### UPDATE APPOINTMENT REQUESTS  ######
+    url(r'^request/mark-as-cancelled/(?P<request_id>[\w/-]+)/$', pricing_views.mark_request_as_cancelled, name='mark_request_as_cancelled'),
+    url(r'^request/mark-as-completed/(?P<request_id>[\w/-]+)/$', pricing_views.mark_request_as_completed, name='mark_request_as_completed'),
+    url(r'^request/mark-as-new/(?P<request_id>[\w/-]+)/$', pricing_views.mark_request_as_new, name='mark_request_as_new'),
+     
 	
     ##############################
     #     SUPPORTING URLS        #
     ##############################
-    # DJANGO_AUTOCOMPLETE_LIGHT 
+    ###### DJANGO_AUTOCOMPLETE_LIGHT ######
 	 url(r'^procedure-autocomplete/$', pricing_views.ProcedureAutocomplete.as_view(), name='procedure-autocomplete',),
 	 url(r'^zipcode-autocomplete/$', pricing_views.ZipcodeAutocomplete.as_view(), name='zipcode-autocomplete',),
      url(r'^city-autocomplete/$', pricing_views.CityAutocomplete.as_view(), name='city-autocomplete',),
