@@ -1,16 +1,32 @@
 <div class="main-header main-header-light">
     <div class="container center">
-        <h1 class="upper">{{header}}
-        	{% if image %}
-        		<div class="alignright margin-bottom-0">
+
+        <h1 class="upper">
+            {{header}}
+        	
+            {% if image %}
+        		<div class="alignleft margin-bottom-0">
                     <div class="product-image">
                         <img src="{{procedure.image_url}}" alt="" style="height: 75px;">
                     </div>
                 </div>
         	{% endif %}
+            
+            {% if button %}
+                <div class="alignright margin-bottom-0">
+                    <div>
+                    <small class="text-muted" style="font-size: 12px; letter-spacing: 1px;">
+                        <a href="{% url 'view_procedure' procedure.slug %}">
+                            More about {{procedure.name}}
+                            <i class="fa fa-arrow-circle-right"></i>
+                        </a>
+                    </small>
+                    </div>
+                </div>
+            {% endif %}
         </h1>
-        <h3 class="light">{{subheader}}</h3>
 
-        
+        <h3 class="light">{{subheader}}</h3>    
+
     </div>
 </div>

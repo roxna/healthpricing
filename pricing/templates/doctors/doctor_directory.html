@@ -23,7 +23,9 @@
                                <th width="30%">DOCTOR</th>
                                <th width="15%">GENDER</th>
                                <th width="15%">INITIAL FEE</th>
-                               <th width="40%">CLINIC</th>
+                               <th width="20%">CITY</th>
+                               <th width="10%">STATE</th>
+                               <th width="10%">ZIP</th>
                             </tr>
                        </thead>
                        <tbody>
@@ -37,11 +39,16 @@
                                   </a>                                  
                                 </th>
                                <th width="15%">{{doctor.get_gender_display}}</th>
-                               <th width="15%">${{doctor.consultation_fee}}</th>
-                               <th width="40%">
-                               		{{doctor.get_primary_clinic.get_address_line1}} <br>
-                               		{{doctor.get_primary_clinic.get_address_line2}}
-                               </th>
+                               <th width="15%">
+                                  {% if doctor.consultation_fee %}
+                                    ${{doctor.consultation_fee}}
+                                  {% else %}
+                                    <span class="text-muted"><em>Not listed</em></span>
+                                  {% endif %}
+                                </th>
+                               <th width="20%">{{doctor.get_primary_clinic.city}}</th>
+                               <th width="10%">{{doctor.get_primary_clinic.state}}</th>
+                               <th width="10%">{{doctor.get_primary_clinic.zipcode}}</th>
                            </tr>
                            {% endfor %}
                        </tbody>

@@ -66,6 +66,9 @@ li {
 #main {
     width: 100%;
 }
+.very-small{
+    font-size: 50%;
+}
 h1 {
     color: #3F4D5B;
     font-size: 48px;

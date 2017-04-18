@@ -1,0 +1,106 @@
+{% extends '_layouts/base_portal.html' %}
+{% load static %}
+
+{% block title %}How It Works - Users{% endblock title %}
+
+{% block content %}
+	
+	{% include '_includes/header_divider.html' with header='How It Works' subheader='Patients' %}
+	
+	<section>
+	    <div class="container margin-top-30 border-bottom">
+
+	    	<div class="padding-vertical-30">
+	            <div class="row">
+	                {% include '_includes/price_comparison.html' %}
+	            </div>
+	        </div>
+	        <div class="divider horizontal"><i class="fa fa-heart"></i></div>
+			<div class="border-bottom">
+	            <div class="row">
+	                <div class="col-md-10 col-md-push-1 center">
+	                	
+	                	 <blockquote class="blockquote large center">
+					        <p>Now, in the Alice-in-Wonderland world of health-care prices, patients who pay up front in cash often get better deals than their insurance plans have negotiated for them
+					        </p>
+					        <footer>
+                            	<h4>Wall Street Journal</h4>
+                        	</footer>
+					    </blockquote>
+
+					</div>
+	            </div>
+	        </div>
+
+	    	<div class="padding-vertical-30 border-bottom">
+	            <div class="row margin-top-30 margin-left-20 center">
+	            	<h2> why the enormous price difference?</h2>
+	            	<!-- <h4 class="text-muted"> a few reasons.. </h4> -->
+	            </div>
+
+	            <div class="row margin-top-30">
+	            	<div class="col-md-6 center margin-bottom-50">
+	            		{% include '_includes/about_widget.html' with icon='fa fa-file-text' title='PAPERWORK' text="54% of self-employed doctors spend 10 hours or more PER WEEK on paperwork. Collection hassles and filing claims take time, effort and more importantly money, so hospitals and clinics can offer discounts if patients pay in cash on the day of service saving hours of administrative work." %}
+                    </div>
+                    <div class="col-md-6 center margin-bottom-50">
+                    	{% include '_includes/about_widget.html' with icon='fa fa-hospital-o' title='INSURER NEGOTIATIONS' text="Very often, the same doctor for the same procedure will bill different prices to different insurance companies based on prices the insurer was able to negotiate with the doctors. So what you pay, when you have insurance, isn't a function only of how much it costs, but how good your insurance provider is at negotiations!" %}
+                    </div>
+				           
+	            </div>
+	        </div>
+
+	        <div class="padding-vertical-30 border-bottom">
+	            <div class="row">
+	                <div class="col-md-10 col-md-push-1 margin-bottom-30">
+
+				        <h2 class="box-title center">to CASH or not to CASH?</h2>
+
+				        <div class="row margin-top-30">
+
+				            <div class="col-md-6 center">
+				                {% include '_includes/about_widget.html' with icon='fa fa-shield' title='WILL YOU REACH <br> YOUR DEDUCTIBLE?' text="If you're going to meet your deductible for the year, consider the self-pay cash option strongly. For example, if you have a <b>HIGH DEDUCIBLE HEALTH PLAN (HDHP) </b>, your insurance doesn't kick in until you meet your annual deductible which can be fairly high. Remember, most insurers won’t count cash payments toward their deductibles, so if you're close to meeting that threshold, cash payments won't help you get there." %}
+				            </div>
+				            <div class="col-md-6 center">
+				                {% include '_includes/about_widget.html' with icon='fa fa-usd' title='SURE ABOUT <br>PRICES' text="Make sure you know the all-inclusive price that you will have to pay the provider (doctor) and are able to pay it all upfront the day of the procedure. Doctors are able to provide discounts on prices because they don't have to run after anyone (insurance companies, individuals) to recover their prices!" %}                   
+				            </div>   
+
+				        </div>            
+
+					</div>
+	            </div>
+	        </div>
+
+	        <div class="padding-vertical-30 border-bottom">
+	            <div class="row">
+	                <div class="col-md-10 col-md-push-1 margin-bottom-30 center">
+	                	
+	                	<div class="row">
+	                		<h2>so where does {{SETTINGS.COMPANY_NAME|lower}} help?</h2>
+	                	</div>
+
+	                	<div class="row margin-top-30">
+	                		<h3 class="text orange">Simple!</h3>
+	                		<p class="text-muted">We help you compare PRICES for your procedure across doctors in your city and help find the best, most affordable doctor for you!<br><br>
+	                		Gone are the days when you 'buy' a surgery and then find out the price you have to pay 2 weeks later...</p>
+	                	</div>  
+
+	                	<div class="row margin-top-30">
+	                		<a href="{% url 'register_user' %}" class="btn btn-primary btn-lg">Sign up now</a>
+	                	</div>
+
+					</div>
+	            </div>
+	        </div>
+
+	        {% include '_includes/cta_footer.html' with header='Intrigued? Start saving now!' href='register_user' cta='SIGN UP TODAY' %} 
+
+	    </div>
+   	</section>
+{% endblock content %}
+
+{% block js %}
+  <script src="{% static 'plugins/chartjs/Chart.min.js' %}"></script>  
+  <script src="{% static 'plugins/chartjs/charts.js' %}"></script>
+{% endblock js %}
+
+

@@ -67,6 +67,8 @@ urlpatterns = [
     ##############################
     url(r'^$', pricing_views.home, name='home'),
     url(r'^about/$', pricing_views.about, name='about'),
+    url(r'^about/physicians/$', pricing_views.about_for_physicians, name='about_for_physicians'),
+    url(r'^about/users/$', pricing_views.about_for_users, name='about_for_users'),
     url(r'^contact-us/$', pricing_views.contact, name='contact'),
     url(r'^blog/$', pricing_views.blog, name='blog'),
 

@@ -111,7 +111,7 @@
                                     </li> 
                                     <!-- /. user account details / log in -->
 
-                                    <li class="menubar-cart">
+                                    <li class="menubar-cart" style="min-width: 500px;">
                                     {% if request.path != '/' %}
                                         <form method="POST" action="{% url 'search_form' request.path %}">
                                         {% csrf_token %}
@@ -135,7 +135,7 @@
             </header>
                     
 
-            <div id="main" class="margin-top-80">          
+            <div id="main">          
                 {% include "_includes/messages.html" with messages=messages %}
 
                 {% block content %} 
@@ -196,6 +196,8 @@
                                    <div class="widget">
                                         <h3 class="widget-title">Company</h3>
                                         <ul>
+                                            <li><a href="{% url 'about_for_users' %}" title="">How It Works - Patients</a></li>
+                                            <li><a href="{% url 'about_for_physicians' %}" title="">How It Works - Physicians</a></li>
                                             <li><a href="{% url 'about' %}" title="">About</a></li>
                                             <li><a href="{% url 'contact' %}" title="">Contact</a></li>
                                             <li><a href="{% url 'blog' %}" title="">Blog</a></li>
@@ -297,7 +299,56 @@
           }, 3000);
       });
     </script> 
+
     {% block js %}{% endblock js %}
+
+    <script type="text/javascript">
+
+        var pricingData = {
+          labels: ['Billed Price', 'Insurer Price', 'Free Market Price'],
+          datasets: [
+            {              
+                label: "Prices for Hysterectomy",
+                data: [77000, 54000, 11000],
+                backgroundColor: ['#898989', '#fd6a4d', '#3CBC8D'],
+            },                
+          ]
+        };
+        var pricingOptions = {
+          scales: {
+               xAxes: [{
+                    stacked: true,
+                    gridLines: {
+                        color: "rgba(0, 0, 0, 0)",
+                    },
+               }],
+               yAxes: [{
+                    stacked: true,
+                    gridLines: {
+                        color: "rgba(0, 0, 0, 0)",
+                    }
+               }]
+            },
+            legend: {
+              display: false
+            },
+            tooltips: {
+              callbacks: {
+                label: function(tooltipItem) {
+                  return tooltipItem.yLabel;
+                },
+              },
+            },
+        }
+
+        // Pass in data/options and generate chart
+        var pricingCtx = $("#pricingChart").get(0).getContext("2d");
+        var pricingChart = new Chart(pricingCtx, {
+          type: 'bar',
+          data: pricingData,
+          options: pricingOptions,
+        });
+    </script>
 
     </body>
 </html>

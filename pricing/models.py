@@ -144,7 +144,7 @@ class Procedure(models.Model):
 	name = models.CharField(max_length=30)  #eg. Root Canal
 	slug = models.CharField(max_length=30)  #eg. root-canal
 	desc = models.CharField(max_length=500)
-	image = models.ImageField(upload_to=procedure_img_directory_path, default='defaults/procedure.jpeg', blank=True, null=True)	
+	image = models.ImageField(upload_to=procedure_img_directory_path, default='defaults/procedure.jpg', blank=True, null=True)	
 	cpt_code = models.CharField(max_length=30, null=True, blank=True)
 	category = models.ForeignKey(Category, related_name='procedures', null=True, blank=True)
 	subcategory = models.ForeignKey(Subcategory, related_name='procedures', null=True, blank=True)

@@ -4,7 +4,7 @@
 			Cancel
 		</a>
 		<a href="{% url 'mark_request_as_completed' req.id %}" class="btn btn-outline btn-xs btn-info">
-			Completed
+			Mark Done
 		</a>
 	{% elif req.status == 2 %}
 		<a href="{% url 'mark_request_as_new' req.id %}" class="btn btn-outline btn-xs btn-primary">

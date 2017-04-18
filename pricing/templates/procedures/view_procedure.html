@@ -3,7 +3,6 @@
 
 {% block title %}Procedure-{{procedure.name}}{% endblock title %}
 
-
 {% block content %}
 <section>
     {% include '_includes/header_divider.html' with header=procedure.name %}
@@ -15,15 +14,17 @@
           <div class="row border-bottom">
 
               <!-- DOCTORS BUTTON -->
-              <div class="row alignright margin-right-30">
-                  <a href="{% url 'view_doctors_by_procedure' procedure.slug %}">
-                    <button class="btn btn-primary btn-outline btn-lg">
-                      Explore doctors
-                    </button>
-                  </a>
+              <div class="row margin-bottom-20">
+                  <div class="alignright margin-right-30">
+                    <a href="{% url 'view_doctors_by_procedure' procedure.slug %}">
+                      <button class="btn btn-primary btn-outline btn-lg">
+                        Explore doctors
+                      </button>
+                    </a>
+                  </div>
               </div>
 
-              <div class="row">
+              <div class="row margin-bottom-50">
                 <!-- BASIC INFORMATION -->
                 <div class="col-md-6">
                     <div class="products products-grid-wrapper">
@@ -31,7 +32,7 @@
                       <div class="box box-default">     
 
                         <div class="box-header">
-                            <h3 class="box-title">{{procedure.name}}</h3>
+                            <h3 class="box-title">Description</h3>
                         </div>
 
                          <div class="product-body">
@@ -44,24 +45,24 @@
                       </div>
 
                     </div>
-                </div>  
+                  </div>  
 
-                <!-- CHART FOR PRICE COMPARISON -->
-                <div class="col-md-6 margin-bottom-30">
-                    <div class="products products-grid-wrapper">
-                      <div class="box box-default">     
+                  <!-- CHART FOR PRICE COMPARISON -->
+                  <div class="col-md-6">
+                      <div class="products products-grid-wrapper">
+                        <div class="box box-default">     
 
-                        <div class="box-header">
-                            <h3 class="box-title">Pricing Chart</h3>
-                        </div>       
-                      
-                        <div class="box-body">
-                            <canvas id="pricingChart" height="250" width="450"></canvas>
-                        </div>        
+                          <div class="box-header margin-bottom-30">
+                              <h3 class="box-title">Pricing Chart</h3>
+                          </div>       
+                        
+                          <div class="box-body">
+                              <canvas id="pricingChart" height="250" width="450"></canvas>
+                          </div>        
 
-                      </div> 
-                    </div>
-                </div>        
+                        </div> 
+                      </div>
+                  </div>        
               </div>
 
           </div>
@@ -86,7 +87,7 @@
         {              
             // label: "Pricing Comparison",
             data: [{{procedure.billed_price}}, {{procedure.insurer_price}}, {{procedure.free_market_price}}],
-            backgroundColor: ['#ff8787', '#ff8787', '#ff8787'],
+            backgroundColor: ['#898989', '#fd6a4d', '#3CBC8D'],
         },                
       ]
     };
@@ -94,9 +95,15 @@
       scales: {
            xAxes: [{
                 stacked: true,
+                gridLines: {
+                    color: "rgba(0, 0, 0, 0)",
+                },
            }],
            yAxes: [{
-                stacked: true
+                stacked: true,
+                gridLines: {
+                    color: "rgba(0, 0, 0, 0)",
+                },
            }]
         },
         legend: {

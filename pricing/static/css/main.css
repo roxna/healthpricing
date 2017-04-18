@@ -399,6 +399,10 @@ img {
   padding-bottom: 10px !important;
 }
 
+.padding-left-0 {
+  padding-left: 0px !important;
+}
+
 .padding-left-10 {
   padding-left: 10px !important;
 }
@@ -2196,6 +2200,12 @@ img {
   letter-spacing: 1px;
 }
 
+.btn.btn-xlg, .btn-xlg.search-submit {
+  font-size: 18px;
+  padding: 10px 15px;
+  letter-spacing: 2px;
+}
+
 .btn.btn-arrow, .btn-arrow.search-submit {
   padding: 7px 8px;
 }
@@ -2680,8 +2690,8 @@ img {
 
 .btn-dark, .search-submit {
   color: #fff;
-  background-color: #333;
-  border-color: #333;
+  background-color: #898989;
+  border-color: #898989;
 }
 
 .btn-dark:focus, .search-submit:focus, .btn-dark.focus, .focus.search-submit {
@@ -2728,8 +2738,8 @@ img {
 }
 
 .btn-dark.btn-outline, .btn-outline.search-submit {
-  color: #333;
-  border-color: #333;
+  color: #898989;
+  border-color: #898989;
   background: transparent;
 }
 
@@ -2855,6 +2865,12 @@ img {
   color: #333;
   border-color: #333;
   background: transparent;
+}
+
+.btn-callout{
+  border-radius: 500px;
+  padding: 50px;
+  font-size: 35px;
 }
 
 
@@ -6334,7 +6350,7 @@ h2.entry-title {
 --------------------------------------------------------------------------------*/
 .main-header {
   color: #fff;
-  background-color: #333;
+  background-color: #777777;
   text-align: center;
   padding: 10px 0;
 }
@@ -6356,6 +6372,14 @@ h2.entry-title {
   letter-spacing: 10px;
   text-indent: center;
 }
+.main-header h2, .main-header-title-smaller {
+  color: #fff;
+  font-size: 25px;
+  margin-top: 10px;
+  margin-bottom: 0;
+  text-indent: center;
+}
+
 
 .main-header h1 small, .main-header-title small {
   color: #fff;
@@ -6369,7 +6393,7 @@ h2.entry-title {
 
 .main-header-light {
   color: #333;
-  background: #f9f9f9;
+  background: #eeeeee;
 }
 
 .main-header-light h1, .main-header-light-title {
@@ -7228,7 +7252,7 @@ h2.entry-title {
 .headroom {
   -webkit-transition: -webkit-transform 0.5s ease;
           transition: transform 0.5s ease;
-  position: fixed;
+  /*position: fixed;*/
   z-index: 1001;
   top: 0;
   left: 0;
@@ -7236,7 +7260,7 @@ h2.entry-title {
 }
 
 .headroom-fixed{
-  height: 80px;
+  min-height: 80px;
   background-color: #fff;
   border-bottom: solid 1px #e1e1e1;
 }
@@ -8640,6 +8664,10 @@ h2.entry-title {
 #messageNotification {
   position: absolute;
   z-index: 1000;  
+}
+.btn-search-icon{
+  font-family: "FontAwesome";
+  font-size: 15px;
 }
 /*.stripe-button-el span{
   font-size: 12px !important;

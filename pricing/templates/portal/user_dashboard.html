@@ -126,7 +126,12 @@
 
                                 <div role="tabpanel" class="tab-pane fade" id="settings">
                                     <div class="text-muted">
-                                        {% crispy user_form user_form.helper %}   
+                                        <div class="row margin-5">
+                                            {% crispy user_form user_form.helper %}   
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-primary btn-lg pull-right">Save Changes</button>
                                     </div>
                                 </div>
 

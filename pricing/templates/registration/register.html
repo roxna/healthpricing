@@ -5,11 +5,11 @@
 
 {% block content %}
 
+{% include '_includes/header_divider.html' with header='Register Now' %}
 <section>
     <div class="container">
 
-        <div class="margin-bottom-50">
-            <h2 class="light upper center spacing-5 margin-top-30">Register Now</h2><br><br>
+        <div class="margin-30">            
             <h5 class="light center">
               Already have an account?
               <a  class="alert" href="{% url 'login' %}">
@@ -43,7 +43,7 @@
                         {% crispy doctor_form doctor_form.helper %}
                       {% endif %}
 
-                      <div class="margin-20">
+                      <div class="margin-top-20">
                         <button type="submit" name="register" class="btn btn-primary btn-lg pull-right">Register</button>
 
                         <small>

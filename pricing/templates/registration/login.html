@@ -4,11 +4,12 @@
 {% block title %}Log In{% endblock title %}
 
 {% block content %}
+
+{% include '_includes/header_divider.html' with header='Log In' %}
 <section>
   <div class="container">
 
-      <div class="margin-bottom-50">
-          <h2 class="light upper center spacing-5 margin-top-30">Log In</h2><br><br>
+      <div class="margin-30">
           <h5 class="light center">
             Don't have an account?
             <a  class="alert" href="{% url 'register_user' %}">
@@ -32,7 +33,7 @@
                     
                     {% crispy form %}
 
-                    <div class="margin-bottom-10">                    
+                    <div class="margin-bottom-10">
                       <button type="submit" name="login" class="btn btn-primary btn-lg pull-right">Log In</button>
                       
                       <small>

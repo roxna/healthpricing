@@ -10,8 +10,9 @@
                         <div class="awe-box-content">
                             <h2 style="text-transform: lowercase;">Do you buy a house <br>and ask for the price <em>later</em>?</h2>
                             <h2 class="text orange">Why is that the case <br>with healthcare?</h2>
-                            <p>We're here to change that around. Get access to prices across doctors, clinics and procedures wherever you are and start saving today!</p>
-                            <p>Pick a procedure. Tell us your location. Get access to a list of clinics in and around you. And book that appointment today!</p>
+                            <p>We're here to change that around. Get access to prices across doctors, clinics and procedures wherever you are and start saving today!</p><br>
+                            <!-- <p>Pick a procedure. Tell us your location. Get access to a list of clinics in and around you. And book that appointment today!</p> -->
+                           {% include '_includes/cta_user_physician.html' %}
                         </div><!-- /.awe-box-content -->
                     </div><!-- /.awe-box -->
 
@@ -22,71 +23,51 @@
         <div class="padding-vertical-50 border-bottom">
             <div class="row">
                 <div class="col-md-4 col-sm-4">
-
-                    <div class="awe-box center box-hover margin-bottom-25">
-                        <div class="awe-box-media">
-                            <div class="awe-box-icon icon-large">
-                                <i class="icon icon-help"></i>
-                            </div>
-                        </div><!-- /.awe-box-media -->
-
-                        <div class="awe-box-content">
-                            <h3>Complete <br> Transparency</h3>
-                            <p>Never again feel like you don't know how much that root canal or that MRI will cost. Feel in control with <b>complete pricing transparency</b>.</p>
-                        </div><!-- /.awe-box-content -->
-                    </div><!-- /.awe-box -->
-
+                    {% include '_includes/about_widget.html' with icon='fa fa-usd' title='MUCH LOWER <br> PRICES' text="By cutting out unneccessary processes and complications, we ensure the best possible prices for patients and for doctors. With both saving money, it's a clear WIN-WIN!" %}
                 </div>
 
                 <div class="col-md-4 col-sm-4">
-
-                    <div class="awe-box center box-hover margin-bottom-25">
-                        <div class="awe-box-media">
-                            <div class="awe-box-icon icon-large">
-                                <i class="icon icon-dolar-circle"></i>
-                            </div>
-                        </div><!-- /.awe-box-media -->
-
-                        <div class="awe-box-content">
-                            <h3>COMPETITIVE <br> PRICING</h3>
-                            <p>We are putting the power in the hands of the patients and the doctors to ensure the system is working for both. By cutting out middlemen, we ensure the best possible cash pricing for patients and for doctors.</p>
-                        </div><!-- /.awe-box-content -->
-                    </div><!-- /.awe-box -->
-
+                    {% include '_includes/about_widget.html' with icon='fa fa-question' title='Complete <br> Transparency' text="Never again feel like you don't know how much that root canal or that MRI will cost. Feel in control with <b>complete pricing transparency</b>." %}
                 </div>
 
                 <div class="col-md-4 col-sm-4">
-
-                    <div class="awe-box center box-hover margin-bottom-25">
-                        <div class="awe-box-media">
-                            <div class="awe-box-icon icon-large">
-                                <i class="icon icon-like"></i>
-                            </div>
-                        </div><!-- /.awe-box-media -->
-
-                        <div class="awe-box-content">
-                            <h3>High <br>Quality</h3>
-                            <p>Transparent pricing doesn't mean lower quality. Instead, we ensure the highest quality of physicians on our platform, showing their <b>specialities, training and accreditations</b>.</p>
-                        </div><!-- /.awe-box-content -->
-                    </div><!-- /.awe-box -->
-
+                    {% include '_includes/about_widget.html' with icon='fa fa-thumbs-up' title='High <br> Quality' text="Transparent pricing doesn't mean lower quality. Instead, we ensure the highest quality of physicians on our platform, showing their <b>specialities, training and accreditations</b>" %}            
                 </div>
+
             </div><!-- /.row -->
-        </div><!-- /.padding-vertical-50 -->
+        </div>
+
+        <div class="padding-vertical-50 border-bottom">
+            <div class="row">
+                {% include '_includes/price_comparison.html' %}                
+            </div>
+        </div>
 
         <div class="padding-vertical-50">
             <div class="row">
-                <div class="col-md-10 col-md-offset-1">
+                <div class="col-md-10 col-md-push-1">
                     <blockquote class="blockquote large center">
                         <p>Sunlight is the best disinfectant.</p>
                         <footer>
                             <h4>William O. Douglas</h4>
                             <!-- <span>CEO</span> -->
                         </footer>
-                    </blockquote>
+                    </blockquote>                    
                 </div>
             </div>
-        </div><!-- /.padding-vertical-80 -->
+            <div class="divider horizontal"><i class="fa fa-heart"></i></div>
+            <div class="row">
+                <div class="center">    
+                    <h3>Find Out More</h3>
+                    {% include '_includes/cta_user_physician.html' %}
+                </div>
+            </div>
+        </div>
 
     </div><!-- /.container -->
 </section>
+
+{% block js %}
+  <script src="{% static 'plugins/chartjs/Chart.min.js' %}"></script>  
+  <script src="{% static 'plugins/chartjs/charts.js' %}"></script>  
+{% endblock js %}

@@ -96,9 +96,15 @@ class ChangeUserForm(ModelForm):
         fields = ('username', 'first_name', 'last_name', 'email',)
 
 class DoctorProfileForm(ModelForm):  
-    username = forms.CharField(required=False, label='Personal Statement') 
-    image = forms.ImageField(required=False, label='Photograph') 
-    comments = forms.CharField(required=False, widget=forms.Textarea(attrs={'rows':3, 'cols':60}))
+    title = forms.CharField(required=False, label='Title (eg. MD)') 
+    # image = forms.ImageField(required=False, label='Photograph') 
+    consultation_fee = forms.IntegerField(required=False, label='Initial Consultation Fee ($)', widget=forms.TextInput(attrs={
+        'placeholder': 'Tip: $0 sees the best results'
+    }))
+    comments = forms.CharField(required=False, widget=forms.Textarea(attrs={
+        'rows':3, 'cols':60, 
+        'placeholder': 'Please share a personal statement, experience, style of engagement etc'
+    }))
 
     def __init__(self, *args, **kwargs):
         super(DoctorProfileForm, self).__init__(*args, **kwargs)
@@ -106,24 +112,28 @@ class DoctorProfileForm(ModelForm):
         self.helper.form_tag = False
         self.helper.layout = Layout(
             Div(
-                Div('title', css_class='col-md-4'),
-                Div('years_experience', css_class='col-md-4'),
-                Div('gender', css_class='col-md-4'),
+                Div('title', css_class='col-md-6'),
+                Div('gender', css_class='col-md-6'),
+                css_class='row',
+            ),
+            Div(
+                Div('years_experience', css_class='col-md-6'),
+                Div('consultation_fee', css_class='col-md-6'),
                 css_class='row',
             ),
             Div(
                 Div('comments', css_class='col-md-12'),
                 css_class='row',
             ),      
-            Div(
-                Div('image', css_class='col-md-6'),
-                css_class='row',
-            ),                   
+            # Div(
+            #     Div('image', css_class='col-md-6'),
+            #     css_class='row',
+            # ),                   
         )
 
     class Meta:
         model = DoctorProfile
-        fields = ("title", "comments", "image", "years_experience", "gender") 
+        fields = ("title", "comments", "years_experience", "gender", "consultation_fee") 
 
 class SearchServiceForm(ModelForm):
     procedure = forms.ModelChoiceField(
@@ -141,10 +151,9 @@ class SearchServiceForm(ModelForm):
         self.helper.form_tag = False
         self.helper.layout = Layout(
             Div(
-                Div('procedure', css_class='col-sm-6 col-md-6 col-lg-6'),
+                Div('procedure', css_class='col-sm-7 col-md-7 col-lg-7'),
                 Div('city', css_class='col-sm-4 col-md-4 col-lg-4'),
-                Submit('search', 'Search', css_class='col-sm-2 col-md-2 col-lg-2 btn btn-primary btn-lg margin-top-20'),
-                # css_class='row',
+                Submit('search', '&#xf002;', css_class='col-sm-1 col-md-1 col-lg-1 btn btn-primary btn-lg margin-top-20 btn-search-icon'),
             ),          
         )
 

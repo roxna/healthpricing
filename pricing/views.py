@@ -363,7 +363,7 @@ def doctor_dashboard(request):
 			user_form.save()
 			doctor_profile_form.save()
 			messages.success(request, "Profile updated successfully")
-			return redirect('dashboard')
+			return redirect('doctor_dashboard')
 		else:
 			messages.info(request, 'Error. Profile not updated')	
 	data = {
@@ -403,8 +403,15 @@ def contact(request):
 
 def about(request):
 	data = {}	
-	return render(request, "website/about.html", data)	
+	return render(request, "website/about.html", data)
 
+def about_for_users(request):
+	data = {}
+	return render(request, "website/about_for_users.html", data)
+
+def about_for_physicians(request):
+	data = {}
+	return render(request, "website/about_for_physicians.html", data)
 
 def blog(request):
 	data = {}	

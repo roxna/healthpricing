@@ -1,0 +1,110 @@
+{% extends '_layouts/base_portal.html' %}
+{% load static %}
+
+{% block title %}How It Works - Physicians{% endblock title %}
+
+{% block content %}
+	
+	{% include '_includes/header_divider.html' with header='How It Works' subheader='Physicians' %}
+	
+	<section>
+	    <div class="container margin-top-30">
+
+	        <div class="padding-vertical-30 border-bottom">
+	            
+	        	<div class="row margin-left-20 center">
+	            	<h2> what's the problem today?</h2><br>
+	            	<h4 class="text-muted">Healthcare is terribly inefficient: <br> DOCTORS spend large amounts of time in paperwork and PATIENTS don't know prices!</h4>
+	            </div>
+
+	            <div class="row">
+	                <div class="col-md-10 col-md-offset-1">
+
+	                	<div class="col-md-4 center margin-bottom-50">
+		                	<button type="button" class="btn btn-callout btn-primary">
+	                        54%</button>
+	                        <div class="text-muted margin-top-20">
+	                        	of self-employed physicians spend at least 10 hours or more on paperwork
+	                        </div>
+	                    </div>
+
+						<div class="col-md-4 center margin-bottom-50">
+		                	<button type="button" class="btn btn-callout btn-danger">
+	                        10%</button>
+	                        <div class="text-muted margin-top-20">
+	                        	of physicians don't discuss cost of treatment with their patients because they don't know it!
+	                        </div>
+	                    </div>
+
+						<div class="col-md-4 center margin-bottom-50">
+		                	<button type="button" class="btn btn-callout btn-info">
+	                        6%</button>
+	                        <div class="text-muted margin-top-20">
+	                        	physicians accepting ONLY cash (up from 3% in 2012)
+	                        </div>
+	                    </div>
+
+	                </div>
+	            </div>
+
+	            <div class="row">
+	            	<div class="col-md-10 col-md-offset-1">
+	            	<span class="text-muted very-small">
+                        SOURCE: Free Market Medication Association, The Kempton Group, EBRI, Medscape Physician Compensation Report
+                    </span>
+                    </div>
+	            </div>	            
+
+	        </div>
+
+	        <div class="padding-vertical-30 border-bottom">
+	            <div class="row">
+	                <div class="col-md-10 col-md-push-1 margin-bottom-30">
+
+				        <h2 class="box-title center">to accept CASH or not?</h2>
+
+				        <div class="row margin-top-30">
+
+				            <div class="col-md-6 center">
+				                {% include '_includes/about_widget.html' with icon='fa fa-shield' title='ADMINISTRATIVE TIME<br> SINK?' text="If you're spending a bunch of time on administrative tasks, filing claims and collecting reimbursements, the self-pay cash option may be a good one to explore. The healthcare industry spends $0.16 in administrative costs for every $1 in revenue (vs. other industries at $0.01), so the cash option just converts the administrative inefficiencies into profits." %}
+				            </div>
+				            <div class="col-md-6 center">
+				                {% include '_includes/about_widget.html' with icon='fa fa-usd' title='INSURANCE NEGOTIATION <br>POWER' text="Insurers won't always resist their patients going down the self-pay option (they're getting their premiums anyway!) However, if a large percentage of your business comes from users of a specific insurer who isn't happy with the self-pay cash option, you must consider the cost-benefit for yourself." %}
+				            </div> 
+
+				        </div>             
+
+					</div>
+	            </div>
+	        </div>
+
+	        <div class="padding-vertical-30 border-bottom">
+	            <div class="row">
+	                <div class="col-md-10 col-md-push-1 margin-bottom-30 center">
+	                	
+	                	<div class="row">
+	                		<h2>so where does {{SETTINGS.COMPANY_NAME|lower}} help?</h2>
+	                	</div>
+
+	                	<div class="row margin-top-30">
+	                		<h3 class="text orange">Simple!</h3>
+	                		<p class="text-muted">We help you find SELF-PAY patients to save you work, time and $!</p>
+	                	</div>  
+
+	                	<div class="row margin-top-30">
+	                		<a href="{% url 'register_doctor' %}" class="btn btn-primary btn-lg">List your practice now</a>
+	                	</div>
+
+					</div>
+	            </div>
+	        </div>	        
+	        
+	        {% include '_includes/cta_footer.html' with header='Interested? Start earning more today!' href='register_doctor' cta='SIGN UP TODAY' %} 
+
+	    </div>
+   	</section>
+{% endblock content %}
+
+
+
+
