@@ -185,10 +185,6 @@ def login(request, template_name='registration/login.html',
         request.current_app = current_app
 
     return TemplateResponse(request, template_name, context)
-
-def terms(request):
-	data = {}	
-	return render(request, "settings/terms.html", data)	
 		
 
 ####################################
@@ -413,6 +409,30 @@ def about_for_physicians(request):
 	data = {}
 	return render(request, "website/about_for_physicians.html", data)
 
-def blog(request):
+def blogs(request):
+	blogs = Blog.objects.all()
+	data = {
+		'blogs': blogs,
+	}	
+	return render(request, "website/blogs.html", data)	
+
+def view_blog(request, blog_slug, blog_id):
+	blog = get_object_or_404(Blog, pk=blog_id)
+	try:
+		prev_blog = get_object_or_404(Blog, pk=int(blog_id)-1)
+	except:
+		prev_blog = blog
+	try:
+		next_blog = get_object_or_404(Blog, pk=int(blog_id)+1)
+	except:
+		next_blog = blog
+	data = {
+		'blog': blog,
+		'prev_blog': prev_blog,
+		'next_blog': next_blog,
+	}	
+	return render(request, "website/view_blog.html", data)
+
+def terms(request):
 	data = {}	
-	return render(request, "website/blog.html", data)	
+	return render(request, "website/terms.html", data)			

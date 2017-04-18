@@ -71,7 +71,7 @@ class TestimonialAdmin(admin.ModelAdmin):
    list_display = ['id', 'title', 'author'] 
 
 admin.site.register(Author, AuthorAdmin)
-# admin.site.register(Blog, BlogAdmin)
+admin.site.register(Blog, BlogAdmin)
 admin.site.register(ContactRequest, ContactRequestAdmin)
 admin.site.register(Testimonial, TestimonialAdmin)
 

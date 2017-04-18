@@ -70,7 +70,8 @@ urlpatterns = [
     url(r'^about/physicians/$', pricing_views.about_for_physicians, name='about_for_physicians'),
     url(r'^about/users/$', pricing_views.about_for_users, name='about_for_users'),
     url(r'^contact-us/$', pricing_views.contact, name='contact'),
-    url(r'^blog/$', pricing_views.blog, name='blog'),
+    url(r'^blogs/$', pricing_views.blogs, name='blogs'),
+    url(r'^blog/(?P<blog_slug>[\w-]+)/(?P<blog_id>[\w/-]+)/$', pricing_views.view_blog, name='view_blog'),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

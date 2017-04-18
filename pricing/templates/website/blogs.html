@@ -1,0 +1,65 @@
+{% extends '_layouts/base_portal.html' %}
+{% load static %}
+
+{% block title %}Blogs{% endblock title %}
+
+{% block content %}
+	{% include '_includes/header_divider.html' with header='Blogs' %}
+	
+	<section class="elements-section">
+      <div class="container">
+      		<div class="blog-wrapper blog-masonry">
+			    <div class="container">
+			        <div class="row row-masonry">
+
+			            {% for blog in blogs %}
+			            <div class="column col-md-4 col-sm-6 col-xs-12">
+			                <article class="post">
+
+			                    <div class="entry-media">
+			                        <div class="entry-slide">
+		                                <div>
+		                                	<a href="{% url 'view_blog' blog.title|slugify blog.pk %}" title="">
+		                                	<img src="{{blog.image_url}}" alt="">
+		                                </div>
+			                        </div>
+			                    </div>
+
+			                    <div class="entry-summary">
+
+			                        <div class="entry-datetime">
+			                            <a href="#" title="">
+			                                <span class="entry-day">{{blog.date.day}}</span>
+			                                <span class="entry-month">/{{blog.date|date:"F"}}</span>
+			                            </a>
+			                        </div>
+
+			                        <div class="entry-title">
+			                            <h2>
+			                            	<a href="{% url 'view_blog' blog.title|slugify blog.pk %}" title="">{{blog.title}}</a>
+			                            </h2>
+			                        </div>
+
+			                        <div class="entry-excerpt">
+			                            <p>{{blog.summary}}</p>
+			                        </div>
+
+			                        <div class="entry-meta">
+			                            <span>Posted by</span>
+			                            <strong class="entry-author"><a href="#" title="">{{blog.author.name}} </a></strong>
+			                            {% if blog.author.title %}
+			                            	<span>({{blog.author.title}})</span>			
+			                            {% endif %}
+			                        </div>
+
+			                    </div>
+			                </article>
+			            </div>
+			            {% endfor %}
+
+			        </div>
+			    </div>
+			</div>
+      </div>
+  	</section>
+{% endblock content %}

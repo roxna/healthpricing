@@ -1,0 +1,135 @@
+{% extends '_layouts/base_portal.html' %}
+{% load static %}
+
+{% block title %}Blog{% endblock title %}
+
+{% block content %}   
+	  {% include '_includes/header_divider.html' with header=blog.title %} 
+
+	  <section class="elements-section">
+      	<div class="container">
+
+		<div class="blog-wrapper blog-detail">
+			<div class="container">
+				
+				<ol class="breadcrumb">
+                    <li class="active">
+                    	<a href="{% url 'blogs'%}">
+                    		<i class="fa fa-chevron-left"></i>Back to Blogs
+                    	</a>
+                    </li>
+                </ol>
+
+			    <div class="row">
+
+			        <div class="col-md-10 col-md-push-1">
+			            <article class="post">
+
+			                <div class="entry-media">
+			                    <div class="entry-feature-image">
+			                        <img src="{{blog.image_url}}" alt="">
+			                    </div>
+			                </div><!-- ./entry-media -->
+
+			                <div class="entry-container">
+			                    <header class="entry-header">
+			                        <div class="entry-datetime">
+			                            <span class="entry-day">{{blog.date.day}}</span>
+			                                <span class="entry-month">/{{blog.date|date:"F"}}</span>
+			                        </div>
+
+			                        <h1 class="entry-title">{{blog.title}}</h1>
+
+			                        <div class="entry-meta">
+			                            <span>Posted by</span>
+			                            <strong class="entry-author"><a href="#" title="">{{blog.author.name}} </a></strong>
+			                            {% if blog.author.title %}
+			                            	<span>({{blog.author.title}})</span>			
+			                            {% endif %}
+
+			                           <!--  <p class="entry-tags">
+			                                <span>/ Tags:</span>
+			                                <a href="#">Accessories</a>,
+			                                <a href="#">Clothing</a>,
+			                                <a href="#">Summer 2015</a>,
+			                                <a href="#">Trending</a>
+			                            </p> -->
+			                        </div>
+
+			                    </header><!-- /.entry-header -->
+
+			                    <div class="entry-content">
+			                        <p>{{blog.content1}}</p>
+
+			                        <!-- Blockquote -->
+			                        <blockquote>
+			                            <p>{{blog.quote1}}</p>
+			                        </blockquote>
+
+			                        <p>{{blog.content2}}</p>
+
+			                        <blockquote>
+			                            <p>{{blog.quote2}}</p>
+			                        </blockquote>
+
+			                    </div>
+
+			                </div>
+			            </article>
+
+			            <div class="entry-container">
+			                <div class="entry-navigation">
+			                    <div class="row cols-border">
+			                        <div class="col-md-6 col-sm-6">
+			                            <div class="entry-navigation-next-post">
+			                                <div class="entry-navigation-header">
+			                                    <a href="{% url 'view_blog' prev_blog.title|slugify prev_blog.pk %}" title="">
+				                                    <span>
+				                                    	<i class="fa fa-chevron-left"></i>
+				                                    	PREVIOUS POST
+				                                    </span>
+				                                </a>
+			                                </div>
+
+			                                <h2 class="entry-navigation-title">
+			                                    <a href="{% url 'view_blog' prev_blog.title|slugify prev_blog.pk %}" title="">{{prev_blog.title|slice:":35"}}</a>
+			                                </h2>
+
+			                                <div class="entry-navigation-meta">
+			                                    <span>Posted by</span>
+			                                    <strong class="entry-author">{{prev_blog.author}}</strong>
+			                                </div>
+			                            </div>
+			                        </div>
+
+			                        <div class="col-md-6 col-sm-6">
+			                            <div class="entry-navigation-prev-post">
+			                                <div class="entry-navigation-header">
+			                                    <a href="{% url 'view_blog' next_blog.title|slugify next_blog.pk %}" title="">
+				                                    <span>		                                    	
+				                                    	NEXT POST
+				                                    	<i class="fa fa-chevron-right"></i>
+				                                    </span>
+				                                </a>
+			                                </div>
+
+			                                <h2 class="entry-navigation-title">
+			                                    <a href="{% url 'view_blog' next_blog.title|slugify next_blog.pk %}" title="">{{next_blog.title|slice:":35"}}</a>
+			                                </h2>
+
+			                                <div class="entry-navigation-meta">
+			                                    <span>Posted by</span>
+			                                    <strong class="entry-author">{{next_blog.author}}</strong>
+			                                </div>
+			                            </div>
+			                        </div>
+			                    </div>
+
+			                </div><!-- /.entry-navigation -->
+			            </div>
+			        </div>
+			    </div>
+			</div>		            
+      	</div>
+  </section>
+{% endblock content %}

@@ -326,13 +326,23 @@ class Author(models.Model):
 class Blog(models.Model):
 	title = models.CharField(max_length=100)
 	summary = models.TextField()
-	content = models.TextField()	
+	content1 = models.TextField()
+	content2 = models.TextField(null=True, blank=True)
+	quote1 = models.CharField(max_length=100, default='')
+	quote2 = models.CharField(max_length=100, null=True, blank=True)
 	date = models.DateField(default=timezone.now)
 	image = models.ImageField(blank=True, null=True)  # No upload_to here because it would go into MEDIA_ROOT instead of being served from static_files
 	author = models.ForeignKey(Author, related_name="blogs")
 
 	def __unicode__(self):
 		return "{}".format(self.title)
+
+ 	@property
+	def image_url(self):
+	    if self.image and hasattr(self.image, 'url'):
+	        return self.image.url
+	    # else:
+	    # 	return 'static/defaults/procedure.jpg'
 
 class ContactRequest(models.Model):
 	topic = models.IntegerField(choices=conf_settings.CONTACT_TOPICS, default=0)
