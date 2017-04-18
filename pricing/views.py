@@ -35,9 +35,6 @@ def home(request):
 	newsletter_form = NewsletterForm(request.POST or None, prefix='newsletter')
 	
 	testimonials = Testimonial.objects.all().order_by('?')[:3]
-	# rv = RequestContext(request, processors=['forms_processor'])
-	# x = rv.get('FORMS')
-	# print x
 	if request.method == 'POST':
 		if 'search' in request.POST:
 			if search_form.is_valid():
@@ -49,7 +46,8 @@ def home(request):
 		elif 'newsletter' in request.POST:
 			if newsletter_form.is_valid():
 				author = newsletter_form.save()
-				return redirect('home')	
+				messages.success(request, 'Awesome - stay tuned! In the meantime, check out our blogs for a healthier living!')
+				return redirect('blogs')	
 	data = {
 		'search_form': search_form,
 		'newsletter_form': newsletter_form,
@@ -158,15 +156,16 @@ def login(request, template_name='registration/login.html',
             # Ensure the user-originating redirection url is safe.
             if not is_safe_url(url=redirect_to, host=request.get_host()):
             	# OVERRIDDEN vs. django.contrib.auth.views.login function
-            	# Redirects to user or doctor dashboard based on user's profile
+            	# Redirects to user or doctor dashboard based on user's profile            	
             	if hasattr(request.user, 'user_profile'):
-                	redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)		   # dashboard/user/
+                	redirect_to = resolve_url(settings.LOGIN_REDIRECT_URL)		   # 'dashboard/user/'
                 elif hasattr(request.user, 'doctor_profile'):
-                	redirect_to = resolve_url(settings.DOCTOR_LOGIN_REDIRECT_URL)  # dashboard/doctor/
+                	redirect_to = resolve_url(settings.DOCTOR_LOGIN_REDIRECT_URL)  # 'dashboard/doctor/'
             
             # Okay, security check complete. Log the user in.
             auth_login(request, form.get_user())
             return HttpResponseRedirect(redirect_to)
+
     else:
         form = authentication_form(request)
 
@@ -197,7 +196,7 @@ def doctor_directory(request):
 def view_doctors_by_procedure(request, procedure_slug):
 	procedure = get_object_or_404(Procedure, slug=procedure_slug)	
 	services = Service.objects.filter(procedure=procedure)
-	doctors = DoctorProfile.objects.filter(services__in=services).distinct('id')
+	doctors = DoctorProfile.objects.filter(is_verified=True, services__in=services).distinct('id')
 
 	if request.method == 'GET':
 		city, max_price, gender, review_score, zipcode = get_query_parameters(request)	
@@ -215,7 +214,7 @@ def view_doctors_by_procedure(request, procedure_slug):
 
 def view_doctors_by_specialty(request, specialty_slug):
 	specialty = Specialty.objects.filter(slug=specialty_slug)	
-	doctors = DoctorProfile.objects.filter(specialtys__in=specialty).distinct('id')
+	doctors = DoctorProfile.objects.filter(is_verified=True, specialtys__in=specialty).distinct('id')
 
 	if request.method == 'GET':
 		city, max_price, gender, review_score, zipcode = get_query_parameters(request)	
@@ -278,7 +277,7 @@ def view_doctor(request, doctor_name, doctor_id):
 	
 	# Show related doctors with the same specialties
 	specialtys = Specialty.objects.filter(doctor=doctor)
-	related_doctors = DoctorProfile.objects.filter(specialtys__in=specialtys).exclude(pk=doctor.id)
+	related_doctors = DoctorProfile.objects.filter(is_verified=True, specialtys__in=specialtys).exclude(pk=doctor.id)
 										 # .annotate(num_leads=Count('leads')).order_by('-num_leads')
 	data = {
 		'doctor': doctor,
@@ -297,7 +296,7 @@ def view_doctor(request, doctor_name, doctor_id):
 
 def view_procedure(request, procedure_slug):
 	procedure = get_object_or_404(Procedure, slug=procedure_slug)
-	related_doctors = DoctorProfile.objects.filter(services__in=procedure.services.all())
+	related_doctors = DoctorProfile.objects.filter(is_verified=True, services__in=procedure.services.all())
 	data = {
 		'procedure': procedure,
 		'related_doctors': related_doctors,
@@ -311,19 +310,40 @@ def procedure_directory(request):
 ###        REQUEST LEADS         ### 
 ####################################
 
+@login_required()
 def mark_request_as_cancelled(request, request_id):
-	return mark_request_as_x(request, request_id, status_int=2, message_text='Request marked as cancelled')
+	return mark_request_as_x(request, request_id, status_int=2, message_text='Request cancelled')
 
+@login_required()
 def mark_request_as_completed(request, request_id):
 	return mark_request_as_x(request, request_id, status_int=3, message_text='Request marked as completed')
 
+@login_required()
+@user_passes_test(is_user)
 def mark_request_as_new(request, request_id):
-	return mark_request_as_x(request, request_id, status_int=1, message_text='Request created', date_requested=timezone.now())
+	return mark_request_as_x(request, request_id, status_int=1, message_text='Request re-created', date_requested=timezone.now())
+
+####################################
+###           REVIEWS           ### 
+####################################
+
+def delete_review(request, review_id):
+	review = get_object_or_404(Review, pk=review_id)
+	review.delete()
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 ####################################
 ###      PROFILE / SETTINGS      ### 
 ####################################	
+
+def dashboard(request):
+	if hasattr(request.user, 'user_profile'):
+		return redirect('user_dashboard')
+	elif hasattr(request.user, 'doctor_profile'):
+		return redirect('doctor_dashboard')
+	else:
+		return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required()
 @user_passes_test(is_user)
@@ -351,13 +371,18 @@ def user_dashboard(request):
 @user_passes_test(is_doctor)
 def doctor_dashboard(request):
 	user_form = ChangeUserForm(request.POST or None, instance=request.user)
+	
 	doctor_profile = request.user.doctor_profile
 	appt_requests = Lead.objects.filter(doctor=doctor_profile)
 	doctor_profile_form = DoctorProfileForm(request.POST or None, instance=doctor_profile)
+
+	clinic_form = ClinicForm(request.POST or None, instance=doctor_profile.get_primary_clinic())
+
 	if request.method == "POST":
-		if user_form.is_valid() and doctor_profile_form.is_valid():
+		if user_form.is_valid() and doctor_profile_form.is_valid() and clinic_form.is_valid():
 			user_form.save()
 			doctor_profile_form.save()
+			clinic_form.save()
 			messages.success(request, "Profile updated successfully")
 			return redirect('doctor_dashboard')
 		else:
@@ -368,6 +393,7 @@ def doctor_dashboard(request):
 		'reviews': None,
 		'user_form': user_form,
 		'doctor_profile_form': doctor_profile_form,
+		'clinic_form': clinic_form,
 	}	
 	return render(request, "portal/doctor_dashboard.html", data)	
 
@@ -398,16 +424,13 @@ def contact(request):
 	return render(request, "website/contact.html", data)
 
 def about(request):
-	data = {}	
-	return render(request, "website/about.html", data)
+	return render(request, "website/about.html")
 
 def about_for_users(request):
-	data = {}
-	return render(request, "website/about_for_users.html", data)
+	return render(request, "website/about_for_users.html")
 
 def about_for_physicians(request):
-	data = {}
-	return render(request, "website/about_for_physicians.html", data)
+	return render(request, "website/about_for_physicians.html")
 
 def blogs(request):
 	blogs = Blog.objects.all()

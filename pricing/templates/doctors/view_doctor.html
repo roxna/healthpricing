@@ -1,5 +1,5 @@
 {% extends '_layouts/base_portal.html' %}
-{% load static %}
+{% load static pricing_filters %}
 
 {% block title %}Doctor-{{doctor.get_full_name}} {% endblock title %}
 
@@ -34,27 +34,53 @@
 		                    <div class="col-lg-9 col-md-9 col-sm-8">
 		                        {% include '_includes/doctor_info_basic.html' with show_reviews=False %}
 		                    </div>
+		                    
 		                    <div class="col-lg-3 col-md-3 col-sm-4">
-	                        	{% if user.is_authenticated %}                        	
-		                        	<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal">Request Appointment</button>
-		                        	{% include '_includes/modal_form.html' with form=lead_form title='Request Appointment' button='Request' form_name='lead_form' %}
-		                        {% elif not user.is_authenticated %}
-		                        	<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal">Request Appointment</button>
-		                        	{% include '_includes/modal_form.html' with form=login_form_appt title='You Must Log In First' button='Log In' form_name='login_form_appt' %}
-		                        {% endif %}
 
-		                        </a><br><br>
+		                    	<div class="row margin-20 center">
+		                        	{% if user.is_authenticated and user.is_user %}
 
-		                        <a href="tel:{{doctor.get_primary_clinic.phone}}" class="margin-right-5">
-		                        	<button class="btn btn-primary btn-lg btn-outline">
-		                        		<i class="fa fa-phone">&nbsp;&nbsp;</i>Call
-		                        	</button>
-		                        </a>
-		                        <a href="mailto:{{doctor.get_primary_clinic.email}}?Subject=Request for information" class="margin-left-5">
-		                        	<button class="btn btn-primary btn-lg btn-outline">
-		                        		<i class="fa fa-envelope">&nbsp;&nbsp;</i>Email
-		                        	</button>
-		                        </a>	                        
+		                        		{% is_doctor_in_user_reviews doctor user.user_profile as already_requested %}
+
+			                        		{% if not already_requested %}
+				                        		<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal">Request Appointment</button>
+				                        		{% include '_includes/modal_form.html' with form=lead_form title='Request Appointment' button='Request' form_name='lead_form' %}
+				                        	{% else %}
+				                        		<span class="text-muted"><em>Appointment requested</em></span>               	
+				                        	{% endif %}
+
+			                        {% elif not user.is_authenticated %}
+			                        	<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal">Request Appointment</button>
+			                        	{% include '_includes/modal_form.html' with form=login_form_appt title='You Must Log In First' button='Log In' form_name='login_form_appt' %}
+			                        {% endif %}
+
+			                        </a>
+		                        </div>
+
+		                        <div class="row">
+
+		                        	<div class="col-md-6 margin-bottom-20">
+				                        <a href="tel:{{doctor.get_primary_clinic.phone}}" class="margin-right-5">
+				                        	<button class="btn btn-primary btn-lg btn-outline margin-bottom-10">
+				                        		<i class="fa fa-phone">&nbsp;&nbsp;</i>
+				                        		Call<br>
+				                        	</button><br>
+				                        	<span class="text-muted center">
+				                        		+1{{doctor.get_primary_clinic.phone}}
+				                        	</span>
+				                        </a>
+			                        </div>
+
+			                        <div class="col-md-6 margin-bottom-20">
+				                        <a href="mailto:{{doctor.get_primary_clinic.email}}?Subject=Request for information" class="margin-left-5">
+				                        	<button class="btn btn-primary btn-lg btn-outline margin-bottom-10">
+				                        		<i class="fa fa-envelope">&nbsp;&nbsp;</i>Email <br>
+				                        	</button><br>
+				                        	<span class="text-muted center">	{{doctor.get_primary_clinic.email}}
+				                        	</span>
+				                        </a>
+			                        </div>
+			                    </div>	                        
 		                    </div>                    
 		                
 		                </div>

@@ -285,7 +285,7 @@ class Lead(models.Model):
 	STATUS_CHOICES = (
 		(1, 'Requested'),
 		(2, 'Cancelled'),
-		(3, 'Completed'),
+		(3, 'Closed'),
 	)
 	status = models.IntegerField(choices=STATUS_CHOICES, default=1)
 	service = models.ForeignKey(Service, related_name='leads')

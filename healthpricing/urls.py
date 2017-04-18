@@ -33,6 +33,7 @@ urlpatterns = [
     #      APPLICATION URLS      #
     ##############################
     ###### USER PROFILE & SETTINGS ######
+    url(r'^dashboard/$', pricing_views.dashboard, name='dashboard'),
     url(r'^dashboard/user/$', pricing_views.user_dashboard, name='user_dashboard'),
     url(r'^dashboard/doctor/$', pricing_views.doctor_dashboard, name='doctor_dashboard'),    
 
@@ -40,18 +41,20 @@ urlpatterns = [
 	url(r'^doctors/directory/$', pricing_views.doctor_directory, name='doctor_directory'),
     url(r'^doctors/procedure/(?P<procedure_slug>[\w-]+)/$', pricing_views.view_doctors_by_procedure, name='view_doctors_by_procedure'),
     url(r'^doctors/specialty/(?P<specialty_slug>[\w-]+)/$', pricing_views.view_doctors_by_specialty, name='view_doctors_by_specialty'),
-	url(r'^doctor/(?P<doctor_name>[\w-]+)/(?P<doctor_id>\d+)/$', pricing_views.view_doctor, name='view_doctor'),
-
-    ###### DIRECTORIES ######    
-    url(r'^procedures/directory/$', pricing_views.procedure_directory, name='procedure_directory'),
-    url(r'^procedures/(?P<procedure_slug>[\w-]+)/$', pricing_views.view_procedure, name='view_procedure'),        
+	url(r'^doctor/(?P<doctor_name>[\w-]+)/(?P<doctor_id>\d+)/$', pricing_views.view_doctor, name='view_doctor'),       
 
     ###### UPDATE APPOINTMENT REQUESTS  ######
     url(r'^request/mark-as-cancelled/(?P<request_id>[\w/-]+)/$', pricing_views.mark_request_as_cancelled, name='mark_request_as_cancelled'),
     url(r'^request/mark-as-completed/(?P<request_id>[\w/-]+)/$', pricing_views.mark_request_as_completed, name='mark_request_as_completed'),
     url(r'^request/mark-as-new/(?P<request_id>[\w/-]+)/$', pricing_views.mark_request_as_new, name='mark_request_as_new'),
-     
+    
+    ###### OTHER ########
+    url(r'^reviews/delete/(?P<review_id>\d+)/$', pricing_views.delete_review, name='delete_review'), 
 	
+    ###### DIRECTORIES ######    
+    url(r'^procedures/directory/$', pricing_views.procedure_directory, name='procedure_directory'),
+    url(r'^procedures/(?P<procedure_slug>[\w-]+)/$', pricing_views.view_procedure, name='view_procedure'), 
+
     ##############################
     #     SUPPORTING URLS        #
     ##############################

@@ -9,6 +9,7 @@ def settings_processor(request):
 	settings = {
 		"COMPANY_NAME": 'HEALTHCARE PRICING',
 		"COMPANY_EMAIL": 'email@pricing.com',
+		"DOCTOR_SUPPORT_EMAIL": 'doctors@pricing.com',
 		"COMPANY_PHONE": '+1 999-999-9999',
 		"COMPANY_ADDRESS": '225 Richardson St, Australian',
 	}
@@ -25,7 +26,7 @@ def data_processor(request):
 		"COMMON_PROCEDURES": common_procedures,
 
 		"ALL_SPECIALTIES": all_specialties,
-		"ALL_DOCTORS": DoctorProfile.objects.all().order_by('user__first_name'),
+		"ALL_DOCTORS": DoctorProfile.objects.filter(is_verified=True).order_by('user__first_name'),
 
 	}
 	return {'DATA': data}

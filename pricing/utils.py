@@ -80,5 +80,5 @@ def mark_request_as_x(request, request_id, status_int, message_text, date_reques
 		lead.date_requested = date_requested
 	lead.save()
 	messages.success(request, message_text)	
-	return redirect('user_dashboard')
+	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

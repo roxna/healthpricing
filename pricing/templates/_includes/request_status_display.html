@@ -1,0 +1,14 @@
+ 
+{% if req.status == 1 %}		
+	<span class="btn btn-xs btn-primary">
+		{{req.get_status_display}}
+	</span>
+{% elif req.status == 2 %}
+	<span class="btn btn-xs btn-dark">
+		{{req.get_status_display}}
+	</span>
+{% elif req.status == 3 %}
+	<span class="btn btn-xs btn-info">
+		{{req.get_status_display}}
+	</span>
+{% endif %}

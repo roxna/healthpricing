@@ -1,0 +1,22 @@
+
+{% if req.status == 1 %}		
+	<a href="{% url 'mark_request_as_cancelled' req.id %}" class="btn btn-outline btn-xs btn-dark">
+		<i class="fa fa-times" aria-hidden="true">&nbsp;</i>
+		Cancel
+	</a>
+	<a href="{% url 'mark_request_as_completed' req.id %}" class="btn btn-outline btn-xs btn-info">
+		<i class="fa fa-star" aria-hidden="true">&nbsp;</i>
+		Done
+	</a>
+{% elif req.status == 2 and user.is_user %}
+	<i class="fa fa-repeat" aria-hidden="true">&nbsp;</i>
+	<a href="{% url 'mark_request_as_new' req.id %}" class="btn btn-outline btn-xs btn-primary">
+		Re-request
+	</a>
+{% elif req.status == 3 and user.is_user %}
+	<!-- <span class="btn btn-info btn-xs"> <i class="fa fa-thumbs-up">&nbsp;</i>Completed</span> -->
+	<a href="{% url 'view_doctor' req.doctor.get_full_name|slugify req.doctor.id %}" class="btn  btn-xs btn-dark">
+		<i class="fa fa-edit" aria-hidden="true">&nbsp;</i>
+		Add Review
+	</a>
+{% endif %}

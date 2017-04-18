@@ -53,3 +53,10 @@ def get_avg_service_price(doctor, procedure):
 # @register.simple_tag
 # def get_service_price_high(doctor, procedure):
 #     return doctor.services.filter(procedure=procedure)[0].price_high
+
+@register.assignment_tag
+def is_doctor_in_user_reviews(doctor, user):
+    for review in user.reviews.all():
+    	if doctor == review.doctor:
+    		return True
+    return False

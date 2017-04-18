@@ -135,6 +135,41 @@ class DoctorProfileForm(ModelForm):
         model = DoctorProfile
         fields = ("title", "comments", "years_experience", "gender", "consultation_fee") 
 
+
+class ClinicForm(ModelForm):
+    pass
+
+    def __init__(self, *args, **kwargs):
+        super(ClinicForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout(
+            Div(
+                Div('name', css_class='col-md-12'),
+                css_class='row',
+            ),
+            Div(
+                Div('address1', css_class='col-md-6'),
+                Div('address2', css_class='col-md-6'),
+                css_class='row',
+            ),
+            Div(
+                Div('city', css_class='col-md-6'),
+                Div('zipcode', css_class='col-md-6'),
+                css_class='row',
+            ),
+            Div(
+                Div('phone', css_class='col-md-6'),
+                Div('email', css_class='col-md-6'),
+                css_class='row',
+            ),                        
+        )
+
+
+    class Meta:
+        model = Clinic
+        fields = ("name", "address1", "address2", "city", "zipcode", "phone", "email")     
+
 class SearchServiceForm(ModelForm):
     procedure = forms.ModelChoiceField(
         required=True,

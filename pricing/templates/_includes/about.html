@@ -22,12 +22,13 @@
 
         <div class="padding-vertical-50 border-bottom">
             <div class="row">
+
                 <div class="col-md-4 col-sm-4">
-                    {% include '_includes/about_widget.html' with icon='fa fa-usd' title='MUCH LOWER <br> PRICES' text="By cutting out unneccessary processes and complications, we ensure the best possible prices for patients and for doctors. With both saving money, it's a clear WIN-WIN!" %}
+                    {% include '_includes/about_widget.html' with icon='fa fa-question' title='Complete <br> Transparency' text="Never again feel like you don't know how much that root canal or that MRI will cost if you're willing to pay cash upfront. Feel in control with <b>complete pricing transparency</b>." %}
                 </div>
 
                 <div class="col-md-4 col-sm-4">
-                    {% include '_includes/about_widget.html' with icon='fa fa-question' title='Complete <br> Transparency' text="Never again feel like you don't know how much that root canal or that MRI will cost. Feel in control with <b>complete pricing transparency</b>." %}
+                    {% include '_includes/about_widget.html' with icon='fa fa-usd' title='MUCH BETTER <br> PRICES' text="By cutting out unneccessary processes and complications, we ensure the best possible prices for patients and for doctors without involving insurance and middlemen. With patients saving more and doctors earning more, it's a clear <b>win-win</b>!" %}
                 </div>
 
                 <div class="col-md-4 col-sm-4">
@@ -37,28 +38,16 @@
             </div><!-- /.row -->
         </div>
 
-        <div class="padding-vertical-50 border-bottom">
-            <div class="row">
-                {% include '_includes/price_comparison.html' %}                
-            </div>
-        </div>
+        {% include '_includes/price_comparison.html' %}
 
         <div class="padding-vertical-50">
-            <div class="row">
-                <div class="col-md-10 col-md-push-1">
-                    <blockquote class="blockquote large center">
-                        <p>Sunlight is the best disinfectant.</p>
-                        <footer>
-                            <h4>William O. Douglas</h4>
-                            <!-- <span>CEO</span> -->
-                        </footer>
-                    </blockquote>                    
-                </div>
-            </div>
+            
+            {% include '_includes/quote.html' %}
+
             <div class="divider horizontal"><i class="fa fa-heart"></i></div>
+            
             <div class="row">
-                <div class="center">    
-                    <h3>Find Out More</h3>
+                <div class="center">                     
                     {% include '_includes/cta_user_physician.html' %}
                 </div>
             </div>

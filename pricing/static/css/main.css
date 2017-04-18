@@ -8557,13 +8557,14 @@ h2.entry-title {
 
 .table-cart {
   margin-bottom: 50px;
+  font-family: Montserrat, Arial, sans-serif;
 }
 
 .table-cart tr > td,
 .table-cart tr > th {
   border-color: #e2e1e1 !important;
   /*text-transform: uppercase;*/
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
 }
 

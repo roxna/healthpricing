@@ -81,32 +81,28 @@
                                     <!-- USER ACCOUNT DETAILS / LOG IN -->
                                     <li class="menubar-account">
                                         {% if not user.is_anonymous %}
-                                        <a href="#" title="" class="awemenu-icon">
-                                            <i class="icon icon-user-circle center"><h4>{{user.username}}</h4></i>
-                                        </a>
-                                        <ul class="submenu megamenu margin-right-100">
-                                            <li>
-                                                <div class="container-fluid">
-                                                    <div class="header-account">
-                                                        <ul>
-                                                            {% if user.is_user %}
-                                                                <li><a href="{% url 'user_dashboard' %}">Dashboard</a></li>
-                                                            {% elif user.is_doctor %}
-                                                                <li><a href="{% url 'doctor_dashboard' %}">Dashboard</a></li>
-                                                            {% endif %}
-                                                            <li><a href="{% url 'logout' %}">Logout</a></li>
-                                                        </ul>
+                                            <a href="{% url 'dashboard' %}" title="" class="awemenu-icon">
+                                                <i class="icon icon-user-circle center"><h4>{{user.username}}</h4></i>
+                                            </a>
+                                            <ul class="submenu megamenu margin-right-100">
+                                                <li>
+                                                    <div class="container-fluid">
+                                                        <div class="header-account">
+                                                            <ul>
+                                                                <li><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                                                                <li><a href="{% url 'logout' %}">Logout</a></li>
+                                                            </ul>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </li>
-                                        </ul>
+                                                </li>
+                                            </ul>
                                         {% else %}
-                                        <a href="{% url 'register_doctor' %}" title="List" class="no-padding-top">
-                                            <button class="btn btn-primary btn-outline btn-lg">List your practice</button>
-                                        </a>   
-                                        <a href="{% url 'register_user' %}" title="" class="awemenu-icon">
-                                            <h3 class="upper light"><small class="text orange">Sign In / Join</small></h3>
-                                        </a>                 
+                                            <a href="{% url 'register_doctor' %}" title="List" class="no-padding-top">
+                                                <button class="btn btn-primary btn-outline btn-lg">List your practice</button>
+                                            </a>   
+                                            <a href="{% url 'register_user' %}" title="" class="awemenu-icon">
+                                                <h3 class="upper light"><small class="text orange">Sign In / Join</small></h3>
+                                            </a>                 
                                         {% endif %}
                                     </li> 
                                     <!-- /. user account details / log in -->
