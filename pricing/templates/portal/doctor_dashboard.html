@@ -11,7 +11,7 @@
     
     {% include '_includes/header_divider.html' with header=doctor.user.get_full_name %}
     
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
 
         <section class="elements-section">

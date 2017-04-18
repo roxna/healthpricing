@@ -12,10 +12,6 @@ import numpy as np
 ###        USER DETAILS        ### 
 ################################### 
 
-# File will be uploaded to MEDIA_ROOT/<buyer_co_name>/<filename>
-def doctor_img_directory_path(instance, filename):
-	return 'doctor_profiles/{0}/{1}'.format(instance.user.username, filename)
-
 class User(AbstractUser):
 	# Already has username, firstname, lastname, email, is_staff, is_active, date_joined
 	pass
@@ -38,23 +34,29 @@ class UserProfile(models.Model):
 	def __unicode__(self):
 		return self.user.username
 
+# File will be uploaded to MEDIA_ROOT/<buyer_co_name>/<filename>
+def doctor_img_directory_path(instance, filename):
+	return 'doctor_profiles/{0}/{1}'.format(instance.user.username, filename)
+
 class DoctorProfile(models.Model):	
 	user = models.OneToOneField(User, related_name="doctor_profile")
 	title = models.CharField(max_length=30, null=True, blank=True) #eg. MD (Dr. John Doe, MD)
 	practice_name = models.CharField(max_length=50, null=True, blank=True) #eg. Bluedot Dental
 	GENDER_CHOICES = (
-		# (-1, 'Unknown'),
-		# (0, 'Any'),
 		(1, 'Male'),
 		(2, 'Female'),
 	)
 	gender = models.IntegerField(choices=GENDER_CHOICES, null=True, blank=True)
 	consultation_fee = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
 	comments = models.CharField(max_length=500, null=True, blank=True)
-	image = models.ImageField(upload_to=doctor_img_directory_path, default='defaults/profile_pic.jpg', blank=True, null=True)
+	image = models.ImageField(upload_to=doctor_img_directory_path, blank=True, null=True)
 	years_experience = models.IntegerField(validators=[MinValueValidator(0)], null=True, blank=True)
-	# Have the Doc's qualifications been verified by us...
-	# ...with state medical boards, are they board certified in their specialty etc
+	'''
+	Have the Doc's qualifications been verified by us
+	Doc's profile will not show in the list of docs unless verified
+		- Basic education/specializations/awards etc
+		- Profile against state medical boards, board certified in their specialty? etc
+	'''	
 	is_verified = models.BooleanField(default=False) 
 
 	def __unicode__(self):
@@ -65,7 +67,7 @@ class DoctorProfile(models.Model):
 	    if self.image and hasattr(self.image, 'url'):
 	        return self.image.url
 	    else:
-	    	return 'defaults/grid.jpg'
+	    	return static('img/defaults/doctor.jpg')
 
 	def get_full_name(self):
 		return u"Dr {} {} {}".format(self.user.first_name, self.user.last_name, self.title)
@@ -144,7 +146,7 @@ class Procedure(models.Model):
 	name = models.CharField(max_length=30)  #eg. Root Canal
 	slug = models.CharField(max_length=30)  #eg. root-canal
 	desc = models.CharField(max_length=500)
-	image = models.ImageField(upload_to=procedure_img_directory_path, default='defaults/procedure.jpg', blank=True, null=True)	
+	image = models.ImageField(upload_to=procedure_img_directory_path, blank=True, null=True)	
 	cpt_code = models.CharField(max_length=30, null=True, blank=True)
 	category = models.ForeignKey(Category, related_name='procedures', null=True, blank=True)
 	subcategory = models.ForeignKey(Subcategory, related_name='procedures', null=True, blank=True)
@@ -168,7 +170,7 @@ class Procedure(models.Model):
 	    if self.image and hasattr(self.image, 'url'):
 	        return self.image.url
 	    else:
-	    	return 'static/defaults/procedure.jpg'
+	    	return static('img/defaults/procedure.png')
 
 class CityStateZipCountry(models.Model):
 	name = models.CharField(max_length=20, default='')
@@ -323,6 +325,10 @@ class Author(models.Model):
 	def __unicode__(self):
 		return "{}".format(self.name)
 
+# File will be uploaded to MEDIA_ROOT/<blog_slug>/<filename>
+def blog_img_directory_path(instance, filename):
+	return 'blogs/{0}/{1}'.format(slugify(instance.title), filename)
+
 class Blog(models.Model):
 	title = models.CharField(max_length=100)
 	summary = models.TextField()
@@ -331,7 +337,7 @@ class Blog(models.Model):
 	quote1 = models.CharField(max_length=100, default='')
 	quote2 = models.CharField(max_length=100, null=True, blank=True)
 	date = models.DateField(default=timezone.now)
-	image = models.ImageField(blank=True, null=True)  # No upload_to here because it would go into MEDIA_ROOT instead of being served from static_files
+	image = models.ImageField(upload_to=blog_img_directory_path, blank=True, null=True)
 	author = models.ForeignKey(Author, related_name="blogs")
 
 	def __unicode__(self):
@@ -341,8 +347,8 @@ class Blog(models.Model):
 	def image_url(self):
 	    if self.image and hasattr(self.image, 'url'):
 	        return self.image.url
-	    # else:
-	    # 	return 'static/defaults/procedure.jpg'
+	    else:
+	    	return static('img/defaults/blog.jpg')
 
 class ContactRequest(models.Model):
 	topic = models.IntegerField(choices=conf_settings.CONTACT_TOPICS, default=0)

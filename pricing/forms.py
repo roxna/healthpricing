@@ -97,7 +97,7 @@ class ChangeUserForm(ModelForm):
 
 class DoctorProfileForm(ModelForm):  
     title = forms.CharField(required=False, label='Title (eg. MD)') 
-    # image = forms.ImageField(required=False, label='Photograph') 
+    image = forms.ImageField(required=False, label='Photograph') 
     consultation_fee = forms.IntegerField(required=False, label='Initial Consultation Fee ($)', widget=forms.TextInput(attrs={
         'placeholder': 'Tip: $0 sees the best results'
     }))
@@ -125,15 +125,15 @@ class DoctorProfileForm(ModelForm):
                 Div('comments', css_class='col-md-12'),
                 css_class='row',
             ),      
-            # Div(
-            #     Div('image', css_class='col-md-6'),
-            #     css_class='row',
-            # ),                   
+            Div(
+                Div('image', css_class='col-md-6'),
+                css_class='row',
+            ),                   
         )
 
     class Meta:
         model = DoctorProfile
-        fields = ("title", "comments", "years_experience", "gender", "consultation_fee") 
+        fields = ("title", "comments", "image", "years_experience", "gender", "consultation_fee") 
 
 
 class ClinicForm(ModelForm):

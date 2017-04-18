@@ -17,6 +17,7 @@
     </div>
 
      <div class="product-body">
+
         <h2 class="product-name">
             {% include '_includes/href/view_doctor.html' %}
                 {{doctor.get_full_name}}
@@ -28,15 +29,13 @@
                    {{specialty}} - 
                 {% endfor %}
             </span>
-        </div>
+        </div>        
 
-        
-
-        <div class="product-price">        
-            <span class="amount">
         <!-- If on procedure page - show price for procedure -->
         {% if procedure_specific %}
-            ${% get_avg_service_price doctor procedure %}
+        <div class="product-price">
+            <span class="amount">
+                ${% get_avg_service_price doctor procedure %}
             </span>
         </div>
         <div class="product-category">
@@ -46,18 +45,21 @@
             </small>
         </div>    
         
-        <!-- Else show consultation fee -->
         {% else %}
-            {% if doctor.consultation_fee == 0 %}
-                Free        
-            {% else %}
-                ${{doctor.consultation_fee}} 
+        
+        <!-- Else show consultation fee -->        
+        <div class="product-price">
+            <span class="amount">
+                {% if doctor.consultation_fee == 0 %}
+                    Free        
+                {% else %}
+                    ${{doctor.consultation_fee}} 
+                {% endif %}
             </span>
         </div>
         <div class="product-category">
             <span> initial consultation </span>
-        </div>
-            {% endif %}
+        </div>            
         {% endif %}                
         
         <div class="product-stars">
@@ -96,5 +98,6 @@
 
     </div>
 
+<!-- </div> -->
 
 </div>

@@ -23,6 +23,12 @@ def times(number):
 def subtract(value, arg):
     return value - arg
 
+@register.filter(name='US_phone_number')
+def US_phone_number(number):
+    if number:
+        return "+1-%s%s%s-%s%s%s-%s%s%s%s" % tuple(number)
+    else:
+        return 'No number provided'
 
 # To add query parameters to URL 
 # or replace it with new value if it's there

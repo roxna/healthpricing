@@ -16,8 +16,8 @@ urlpatterns = [
     #   AUTHENTICATION URLS      #
     ##############################
     # Registration & Log In
-    url(r'^register-user/$', pricing_views.register_user, name='register_user'),
-    url(r'^register-doctor/$', pricing_views.register_doctor, name='register_doctor'),
+    url(r'^register/user/$', pricing_views.register_user, name='register_user'),
+    url(r'^register/doctor/$', pricing_views.register_doctor, name='register_doctor'),
     url(r'^login/$', pricing_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
 

@@ -1,7 +1,7 @@
 {% extends '_layouts/base_portal.html' %}
 {% load static pricing_filters %}
 
-{% block title %}Doctor-{{doctor.get_full_name}} {% endblock title %}
+{% block title %}{{doctor.get_full_name}} {% endblock title %}
 
 
 {% block content %}
@@ -59,24 +59,25 @@
 
 		                        <div class="row">
 
-		                        	<div class="col-md-6 margin-bottom-20">
+		                        	<div class="col-md-6 margin-bottom-20 center">
 				                        <a href="tel:{{doctor.get_primary_clinic.phone}}" class="margin-right-5">
 				                        	<button class="btn btn-primary btn-lg btn-outline margin-bottom-10">
 				                        		<i class="fa fa-phone">&nbsp;&nbsp;</i>
 				                        		Call<br>
 				                        	</button><br>
-				                        	<span class="text-muted center">
-				                        		+1{{doctor.get_primary_clinic.phone}}
+				                        	<span class="text-muted">
+				                        		<small><em>{{doctor.get_primary_clinic.phone|US_phone_number}}</em></small>
 				                        	</span>
 				                        </a>
 			                        </div>
 
-			                        <div class="col-md-6 margin-bottom-20">
+			                        <div class="col-md-6 margin-bottom-20 center">
 				                        <a href="mailto:{{doctor.get_primary_clinic.email}}?Subject=Request for information" class="margin-left-5">
 				                        	<button class="btn btn-primary btn-lg btn-outline margin-bottom-10">
 				                        		<i class="fa fa-envelope">&nbsp;&nbsp;</i>Email <br>
 				                        	</button><br>
-				                        	<span class="text-muted center">	{{doctor.get_primary_clinic.email}}
+				                        	<span class="text-muted">
+				                        		<small><em>{{doctor.get_primary_clinic.email}}</em></small>
 				                        	</span>
 				                        </a>
 			                        </div>

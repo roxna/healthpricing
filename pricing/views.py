@@ -114,7 +114,7 @@ def register_user(request):
 
 def register_doctor(request):
 	user_form = RegisterUserForm(request.POST or None)  
-	doctor_form = DoctorProfileForm(request.POST or None)
+	doctor_form = DoctorProfileForm(request.POST or None, request.FILES or None)
 	
 	if request.method == "POST":
 		if  user_form.is_valid() and doctor_form.is_valid():
@@ -370,18 +370,20 @@ def user_dashboard(request):
 @login_required()
 @user_passes_test(is_doctor)
 def doctor_dashboard(request):
-	user_form = ChangeUserForm(request.POST or None, instance=request.user)
-	
 	doctor_profile = request.user.doctor_profile
 	appt_requests = Lead.objects.filter(doctor=doctor_profile)
-	doctor_profile_form = DoctorProfileForm(request.POST or None, instance=doctor_profile)
 
+	user_form = ChangeUserForm(request.POST or None, instance=request.user)
+	doctor_profile_form = DoctorProfileForm(request.POST or None, request.FILES or None, instance=doctor_profile)
 	clinic_form = ClinicForm(request.POST or None, instance=doctor_profile.get_primary_clinic())
 
 	if request.method == "POST":
 		if user_form.is_valid() and doctor_profile_form.is_valid() and clinic_form.is_valid():
+			
 			user_form.save()
-			doctor_profile_form.save()
+			doc = doctor_profile_form.save()
+			print doc
+			print request.FILES
 			clinic_form.save()
 			messages.success(request, "Profile updated successfully")
 			return redirect('doctor_dashboard')
