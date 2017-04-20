@@ -165,11 +165,34 @@ class ClinicForm(ModelForm):
             ),                        
         )
 
-
     class Meta:
         model = Clinic
         fields = ("name", "address1", "address2", "city", "zipcode", "phone", "email")     
 
+class PricePointForm(ModelForm):
+    pass
+
+    def __init__(self, *args, **kwargs):
+        super(PricePointForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_tag = False
+        self.helper.layout = Layout(
+            Div(
+                Div('price', css_class='col-md-6'),
+                Div('zipcode', css_class='col-md-6'),
+                css_class='row',
+            ),   
+            Div(
+                Div('comments', css_class='col-md-12'),
+                css_class='row',
+            ),                                   
+        )
+
+    class Meta:
+        model = PricePoint
+        fields = ("price", "zipcode", "comments")
+
+        
 class SearchServiceForm(ModelForm):
     procedure = forms.ModelChoiceField(
         required=True,

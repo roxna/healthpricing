@@ -1,7 +1,20 @@
 {% if related_doctors %}
 <div class="relared-products margin-top-50">
     <div class="relared-products-header margin-bottom-50">
-        <h3 class="upper">Popular Doctors Who Can Help</h3>
+        <h3 class="upper">Popular Doctors Who Can Help
+
+	        <!-- EXPLORE DOCTORS BUTTON -->
+	        {% if procedure %}
+              <div class="alignright margin-right-30">
+                <a href="{% url 'view_doctors_by_procedure' procedure.slug %}">
+                  <button class="btn btn-primary btn-outline btn-lg">
+                    Explore all doctors
+                  </button>
+                </a>
+              </div>
+            {% endif %}
+
+          </h3>
     </div>
 
     {% for doctor in related_doctors %}

@@ -5,28 +5,18 @@
 
 {% block content %}
 <section>
-    {% include '_includes/header_divider.html' with header=procedure.name %}
+    {% include '_includes/header_divider.html' with header=procedure.name image=True %}
     
     <form method="POST" novalidate>
     {% csrf_token %}
 
-      <div class="container margin-top-30">
+      <div class="container margin-vertical-30">
           <div class="row border-bottom">
 
-              <!-- DOCTORS BUTTON -->
-              <div class="row margin-bottom-20">
-                  <div class="alignright margin-right-30">
-                    <a href="{% url 'view_doctors_by_procedure' procedure.slug %}">
-                      <button class="btn btn-primary btn-outline btn-lg">
-                        Explore doctors
-                      </button>
-                    </a>
-                  </div>
-              </div>
-
-              <div class="row margin-bottom-50">
-                <!-- BASIC INFORMATION -->
+              <div class="row margin-bottom-50">                
                 <div class="col-md-6">
+
+                    <!-- BASIC INFORMATION -->
                     <div class="products products-grid-wrapper">
 
                       <div class="box box-default">     
@@ -37,14 +27,28 @@
 
                          <div class="product-body">
                             <div class="product-category">
-                                <span> {{procedure.desc}}
-                                </span>
+                                <span> {{procedure.desc}}</span>
                             </div>
                           </div>
-
                       </div>
-
                     </div>
+
+                    <div class="divider horizontal"><i class="fa fa-heart"></i></div>
+
+                    <!-- PRICE FORM  -->
+                    <div class="center">
+                      <div class="text-muted margin-bottom-10">
+                          Have an estimate of an <b>ALL CASH</b> (no insurance) price? <br><br>
+                          <button type="button" class="btn btn-danger btn-outline btn-lg" data-toggle="modal" data-target="#addModal">Please tell us!</button>
+                          
+                          {% if user.is_authenticated and user.is_user %}
+                            {% include '_includes/modal_form.html' with form=price_point_form title='Submit Price' button='Submit' form_name='price_point_form' %}
+                          {% elif not user.is_authenticated %}                        
+                            {% include '_includes/modal_form.html' with form=login_form title='You Must Log In First' button='Log In' form_name='login_form' %}
+                          {% endif %}
+                      </div>
+                    </div>
+
                   </div>  
 
                   <!-- CHART FOR PRICE COMPARISON -->
@@ -52,13 +56,70 @@
                       <div class="products products-grid-wrapper">
                         <div class="box box-default">     
 
-                          <div class="box-header margin-bottom-30">
-                              <h3 class="box-title">Pricing Chart</h3>
-                          </div>       
+                          <div class="row">
+                            <div class="box-header margin-bottom-30">
+                                <h3 class="box-title">Cost Calculator</h3>
+                            </div>
+                          </div>
                         
-                          <div class="box-body">
-                              <canvas id="pricingChart" height="250" width="450"></canvas>
-                          </div>        
+                          <div class="row">
+                            <div class="box-body">
+                                Plug in your health insurance details to see whether an all-cash / no insurance deal would be better than using your insurance!
+                            </div><br>
+                          </div>
+
+                          <div class="divider horizontal"><i class="fa fa-heart"></i></div>
+                          
+                          <div class="row">
+                            <div class="box-body">
+                              <div class="col-md-6">
+                                 <button class="btn btn-danger btn-callout btn-xlg padding-20"> 
+                                    <span class="very-small">You could pay</span><br><br>
+                                    <h2 id="output_you_pay" class="text white">${{procedure.free_market_price}}</h2>
+                                </button>
+                              </div>
+                              <div class="col-md-6">
+                                <div class="product-details-wrapper">
+                                  <div class="product-features">
+                                    <h3>Call outs:</h3>
+
+                                    <ul>
+                                        <li>${{procedure.insurer_price}} average network/insurer price</li>
+                                        <li>Insurance covers <span id="output_insurance_covers">$0</span></li> 
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <!-- CALCULATOR FORM FIELDS -->
+                          <div class="row margin-top-30">
+                            <div class="col-md-4"> 
+                                Deductible left ($): 
+                            </div>
+                            <div class="col-md-7">
+                              <input type="number" name="price_point-price" required="" class="numberinput form-control" id="input_deductible_left"> 
+                            </div> 
+                          </div>
+
+                          <div class="row margin-top-20">
+                            <div class="col-md-4"> 
+                                Your co-pay ($): 
+                            </div>
+                            <div class="col-md-7">
+                              <input type="number" name="price_point-price" required="" class="numberinput form-control" id="input_copay"> 
+                            </div> 
+                          </div>
+
+                          <div class="row margin-top-20">
+                            <div class="col-md-4"> 
+                                Co-insurance (%): 
+                            </div>
+                            <div class="col-md-7">
+                              <input type="number" name="price_point-price" required="" class="numberinput form-control" id="input_coinsurance"> 
+                            </div> 
+                          </div>
 
                         </div> 
                       </div>
@@ -67,7 +128,7 @@
 
           </div>
 
-          {% include '_includes/doctor_related.html' %}
+          {% include '_includes/doctor_related.html' with procedure=procedure %}
 
       </div>
 
@@ -76,55 +137,35 @@
 {% endblock content %}
 
 {% block js %}
-  <script src="{% static 'plugins/chartjs/Chart.min.js' %}"></script>  
-  <script src="{% static 'plugins/chartjs/charts.js' %}"></script>  
 
   <script type="text/javascript">
+    
+    // Update the 'Amount you could pay' section
+    $('input').on('keyup', function(){
 
-    var pricingData = {
-      labels: ['Billed Price', 'Insurer Price', 'Free Market Price'],
-      datasets: [
-        {              
-            // label: "Pricing Comparison",
-            data: [{{procedure.billed_price}}, {{procedure.insurer_price}}, {{procedure.free_market_price}}],
-            backgroundColor: ['#898989', '#fd6a4d', '#3CBC8D'],
-        },                
-      ]
-    };
-    var pricingOptions = {
-      scales: {
-           xAxes: [{
-                stacked: true,
-                gridLines: {
-                    color: "rgba(0, 0, 0, 0)",
-                },
-           }],
-           yAxes: [{
-                stacked: true,
-                gridLines: {
-                    color: "rgba(0, 0, 0, 0)",
-                },
-           }]
-        },
-        legend: {
-          display: false
-        },
-        tooltips: {
-          callbacks: {
-            label: function(tooltipItem) {
-              return tooltipItem.yLabel;
-            },
-          },
-        },
-    }
+        // Get the values from the input fields
+        var input_deductible_left, input_copay, input_coinsurance;
+        input_deductible_left = $('#input_deductible_left').val();
+        input_copay = $('#input_copay').val();
+        input_coinsurance = $('#input_coinsurance').val();
 
-    // Pass in data/options and generate chart
-    var pricingCtx = $("#pricingChart").get(0).getContext("2d");
-    var pricingChart = new Chart(pricingCtx, {
-      type: 'bar',
-      data: pricingData,
-      options: pricingOptions,
+        // If the deductible hasn't been met, user covers the entire amount
+        if(input_deductible_left > {{procedure.insurer_price}}){
+          $('#output_you_pay').html('$'+{{procedure.insurer_price}});
+          $('#output_insurance_covers').html('$0');
+        }
+        else{
+          
+          var coinsurance_amount = {{procedure.insurer_price}}-input_deductible_left;
+          var you_pay = input_deductible_left + input_copay + input_coinsurance/100*(coinsurance_amount);
+          var insurance_covers = (1-input_coinsurance)/100*(coinsurance_amount);
+
+          $('#output_you_pay').html('$'+you_pay);
+          $('#output_insurance_covers').html('$'+insurance_covers);
+        }
+        
     });
+    
   </script>
 
 {% endblock js %}

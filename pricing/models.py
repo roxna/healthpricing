@@ -254,8 +254,9 @@ class Service(models.Model):
 
 
 ###################################
-###           REVIEWS           ### 
+###    USER SUBMITTED INFO      ### 
 ################################### 
+
 
 class Review(models.Model):
 	title = models.CharField(max_length=30, null=True, blank=True)
@@ -276,10 +277,20 @@ class Review(models.Model):
 	def __unicode__(self):
 		return u"{}".format(self.title)
 
+class PricePoint(models.Model):
+	price = models.IntegerField(validators=[MinValueValidator(0)])
+	comments = models.CharField(max_length=250, null=True, blank=True)
+	service = models.ForeignKey(Service, related_name="price_points", null=True, blank=True)
+	procedure = models.ForeignKey(Procedure, related_name="price_points", null=True, blank=True)
+	zipcode = models.ForeignKey(Zipcode, related_name='price_points', null=True, blank=True)
+	user = models.ForeignKey(UserProfile, related_name="price_points")
 
-###################################
-###       TRACK INTEREST        ### 
-###################################
+	def __unicode__(self):
+		return u"${}".format(self.price)
+
+
+# TRACK INTEREST #
+##################
 
 class Lead(models.Model):
 	date_requested = models.DateTimeField(default=timezone.now)

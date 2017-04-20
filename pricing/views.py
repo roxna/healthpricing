@@ -232,15 +232,16 @@ def view_doctors_by_specialty(request, specialty_slug):
 
 def view_doctor(request, doctor_name, doctor_id):
 	doctor = get_object_or_404(DoctorProfile, pk=doctor_id)
+	doctor_services = Service.objects.filter(doctor=doctor)
 	
 	login_form_appt = LoginForm(data=request.POST or None, prefix="login_appt")
 	login_form_review = LoginForm(data=request.POST or None, prefix="login_review")
 
 	doctor_review_form = ReviewForm(request.POST or None, prefix="review")
-	doctor_review_form.fields['service'].queryset = Service.objects.filter(doctor=doctor)
+	doctor_review_form.fields['service'].queryset = doctor_services
 
 	lead_form = LeadForm(request.POST or None, prefix="lead")
-	lead_form.fields['service'].queryset = Service.objects.filter(doctor=doctor)
+	lead_form.fields['service'].queryset = doctor_services
 
 	if request.method == 'POST':
 		if 'login_form_appt' in request.POST:	
@@ -281,10 +282,12 @@ def view_doctor(request, doctor_name, doctor_id):
 										 # .annotate(num_leads=Count('leads')).order_by('-num_leads')
 	data = {
 		'doctor': doctor,
+		
 		'login_form_appt': login_form_appt,
 		'login_form_review': login_form_review,
 		'doctor_review_form': doctor_review_form,
-		'lead_form': lead_form,
+		'lead_form': lead_form,		
+
 		'related_doctors': related_doctors,
 	}	
 	return render(request, "doctors/view_doctor.html", data)
@@ -297,8 +300,32 @@ def view_doctor(request, doctor_name, doctor_id):
 def view_procedure(request, procedure_slug):
 	procedure = get_object_or_404(Procedure, slug=procedure_slug)
 	related_doctors = DoctorProfile.objects.filter(is_verified=True, services__in=procedure.services.all())
+
+	price_point_form = PricePointForm(request.POST or None, prefix="price_point")
+	# price_point_form.fields['service'].queryset = doctor_services
+
+	login_form = LoginForm(data=request.POST or None, prefix="login")
+
+	if request.method == 'POST':
+		if 'login_form' in request.POST:	
+			if login_form.is_valid():
+				user = authenticate(username=login_form.cleaned_data['username'], password=login_form.cleaned_data['password'])
+				log_user_in(request, user, error_msg='Invalid credentials')				
+				return HttpResponseRedirect(request.META.get('HTTP_REFERER'))		
+		if 'price_point_form' in request.POST:	
+			if price_point_form.is_valid():
+				price_point = price_point_form.save(commit=False)
+				price_point.procedure = procedure
+				price_point.user = request.user.user_profile
+				price_point.save()
+				messages.success(request, 'Thanks! This will help us improve the service')
+				return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 	data = {
 		'procedure': procedure,
+
+		'login_form': login_form,
+		'price_point_form': price_point_form,
+
 		'related_doctors': related_doctors,
 	}
 	return render(request, "procedures/view_procedure.html", data)

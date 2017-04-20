@@ -1,0 +1,9 @@
+ {% load pricing_filters %}
+ 
+<span style="font-size: 50%">
+    {% if avg_price > procedure.free_market_price %}
+        <i class="fa fa-exclamation-triangle text red"></i>
+    {% else %}
+        <i class="fa fa-thumbs-up text green"></i>
+    {% endif %}
+</span>

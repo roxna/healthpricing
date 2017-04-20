@@ -33,33 +33,19 @@
 
         <!-- If on procedure page - show price for procedure -->
         {% if procedure_specific %}
-        <div class="product-price">
-            <span class="amount">
-                ${% get_avg_service_price doctor procedure %}
-            </span>
-        </div>
-        <div class="product-category">
-            <small> 
-                all incl. self-pay cash price <br>
-                for <a href="{% url 'view_procedure' procedure.slug %}">{{procedure.name}}</a>
-            </small>
-        </div>    
-        
-        {% else %}
-        
-        <!-- Else show consultation fee -->        
-        <div class="product-price">
-            <span class="amount">
-                {% if doctor.consultation_fee == 0 %}
-                    Free        
-                {% else %}
-                    ${{doctor.consultation_fee}} 
-                {% endif %}
-            </span>
-        </div>
-        <div class="product-category">
-            <span> initial consultation </span>
-        </div>            
+            {% get_avg_service_price doctor procedure as avg_price %}
+            <div class="product-price">
+                <span class="amount">
+                    ${{ avg_price }}
+                </span>
+                {% include '_includes/price_vs_free_market_icon.html' %}
+            </div>
+            <div class="product-category">
+                <small> 
+                    all incl. self-pay cash price <br>
+                </small>
+            </div>    
+                
         {% endif %}                
         
         <div class="product-stars">

@@ -2926,6 +2926,12 @@ img {
 .text.orange{
   color: #ffa200;
 }
+.text.red{
+  color: #f44336;
+}
+.text.green{
+  color: #0cca4b;
+}
 .text.white{
   color: #fff;
 }

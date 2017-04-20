@@ -53,14 +53,12 @@
 			                        	<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal">Request Appointment</button>
 			                        	{% include '_includes/modal_form.html' with form=login_form_appt title='You Must Log In First' button='Log In' form_name='login_form_appt' %}
 			                        {% endif %}
-
-			                        </a>
 		                        </div>
 
-		                        <div class="row">
+		                        <div class="row margin-top-20">
 
 		                        	<div class="col-md-6 margin-bottom-20 center">
-				                        <a href="tel:{{doctor.get_primary_clinic.phone}}" class="margin-right-5">
+				                        <a href="tel:+1{{doctor.get_primary_clinic.phone}}" class="margin-right-5">
 				                        	<button class="btn btn-primary btn-lg btn-outline margin-bottom-10">
 				                        		<i class="fa fa-phone">&nbsp;&nbsp;</i>
 				                        		Call<br>
@@ -72,7 +70,7 @@
 			                        </div>
 
 			                        <div class="col-md-6 margin-bottom-20 center">
-				                        <a href="mailto:{{doctor.get_primary_clinic.email}}?Subject=Request for information" class="margin-left-5">
+				                        <a href="mailto:{{doctor.get_primary_clinic.email}}?Subject=Request%20for%20information" class="margin-left-5">
 				                        	<button class="btn btn-primary btn-lg btn-outline margin-bottom-10">
 				                        		<i class="fa fa-envelope">&nbsp;&nbsp;</i>Email <br>
 				                        	</button><br>
@@ -81,7 +79,8 @@
 				                        	</span>
 				                        </a>
 			                        </div>
-			                    </div>	                        
+			                    </div>
+
 		                    </div>                    
 		                
 		                </div>

@@ -48,7 +48,7 @@ def url_replace(request, **kwargs):
 def get_nth_percentile_price(procedure, percentile):
     return procedure.get_nth_percentile_price(percentile)
 
-@register.simple_tag
+@register.assignment_tag
 def get_avg_service_price(doctor, procedure):
     return doctor.services.filter(procedure=procedure)[0].avg_price
 

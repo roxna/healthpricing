@@ -40,14 +40,28 @@
             <div role="tabpanel" class="tab-pane" id="product-procedures">
                 <h3>Procedures</h3>
                 <ul>
-                    {% for service in doctor.services.all %}
-                        <a href="{% url 'view_procedure' service.procedure.slug  %}" title="">
-                            <button class="btn btn-primary btn-outline btn-lg">
-                                {{service.procedure.name}} <br><br>
-                                ${{service.avg_price}}
-                            </button>
-                        </a>
-                    {% endfor %}                    
+                    <div class="row">
+                    {% for service in doctor.services.all %}                        
+                        <!-- Grey Block -->                        
+                        <div class="col-md-4 col-sm-6 item"">
+                            <a href="{% url 'view_procedure' service.procedure.slug  %}" title="">
+                                <div class="customer-block">                    
+                                    <div class="customers-say-customer">
+                                        <div class="customer-name">
+                                            <h4>{{service.procedure.name}}</h4>
+                                        </div>
+                                    </div>                                    
+                                    <h5>
+                                        ${{service.avg_price}}
+                                        <span style="font-size:200%">
+                                        {% include '_includes/price_vs_free_market_icon.html' with avg_price=service.avg_price procedure=service.procedure %}
+                                        </span>
+                                    </h5>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}                
+                    </div>    
                 </ul>
             </div>
 
