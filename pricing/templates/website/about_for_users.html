@@ -10,11 +10,7 @@
 	<section>
 	    <div class="container margin-top-30 border-bottom">
 
-	        {% include '_includes/price_comparison.html' %}
-			
-			<div class="border-bottom">
-	            {% include '_includes/quote.html' %}
-	        </div>
+	        {% include '_includes/price_comparison.html' %}	
 
 	    	<div class="padding-vertical-30 border-bottom">
 	            <div class="row margin-top-30 margin-left-20 center">
@@ -69,8 +65,8 @@
 	                	</div>  
 
 	                	<div class="row margin-top-30">
-	                		<h3 class="text orange">Search now</h3>
-	                		<i class="fa fa-chevron-down fa-4x" aria-hidden="true"></i>
+	                		<h3 class="text orange">Find out now</h3>
+	                		<!-- <i class="fa fa-chevron-down fa-2x" aria-hidden="true"></i> -->
 	                		<form method="POST" action="{% url 'search_form' request.path %}">
                             {% csrf_token %}
                                 {% crispy search_form search_form.helper %}
