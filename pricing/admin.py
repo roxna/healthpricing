@@ -10,52 +10,27 @@ class UserAdmin(admin.ModelAdmin):
 class UserProfileAdmin(admin.ModelAdmin):
    list_display = ['id', 'user']
 
-class DoctorProfileAdmin(admin.ModelAdmin):
-   list_display = ['id', 'user', 'title', ]   
-
-class QualificationAdmin(admin.ModelAdmin):
-   list_display = ['id', 'name', 'doctor']
+class ProviderAdmin(admin.ModelAdmin):
+   list_display = ['id', 'name', ]   
 
 
 admin.site.register(User, UserAdmin)
 admin.site.register(UserProfile, UserProfileAdmin)
-admin.site.register(DoctorProfile, DoctorProfileAdmin)
-
-admin.site.register(Specialty, QualificationAdmin)
-admin.site.register(Education, QualificationAdmin)
-admin.site.register(Affiliation, QualificationAdmin)
+admin.site.register(Provider, ProviderAdmin)
 
 class ProcedureAdmin(admin.ModelAdmin):
    list_display = ['id', 'name', 'category', 'subcategory']  
 
-class ClinicAdmin(admin.ModelAdmin):
-   list_display = ['id', 'name', 'doctor'] 
-
-class CityStateZipCountryAdmin(admin.ModelAdmin):
+class NameSlugAdmin(admin.ModelAdmin):
    list_display = ['id', 'name',]
-
-class ServiceAdmin(admin.ModelAdmin):
-   list_display = ['id', 'procedure', 'doctor', 'clinic', 'avg_price']
 
 
 admin.site.register(Procedure, ProcedureAdmin)
-admin.site.register(Category, CityStateZipCountryAdmin)
-admin.site.register(Subcategory, CityStateZipCountryAdmin)
-admin.site.register(Clinic, ClinicAdmin)
-admin.site.register(Zipcode, CityStateZipCountryAdmin)
-admin.site.register(City, CityStateZipCountryAdmin)
-admin.site.register(State, CityStateZipCountryAdmin)
-admin.site.register(Country, CityStateZipCountryAdmin)
-admin.site.register(Service, ServiceAdmin)
-
-class LeadAdmin(admin.ModelAdmin):
-   list_display = ['id', 'service', 'get_status_display', 'user', 'doctor'] 
-
-class ReviewAdmin(admin.ModelAdmin):
-   list_display = ['id', 'title', 'comments'] 
-
-admin.site.register(Lead, LeadAdmin)
-admin.site.register(Review, ReviewAdmin)
+admin.site.register(Category, NameSlugAdmin)
+admin.site.register(Subcategory, NameSlugAdmin)
+admin.site.register(Zipcode, NameSlugAdmin)
+admin.site.register(City, NameSlugAdmin)
+admin.site.register(State, NameSlugAdmin)
 
 
 class AuthorAdmin(admin.ModelAdmin):

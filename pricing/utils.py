@@ -73,12 +73,4 @@ def redirect_per_search_query(procedure, city):
     redirect_to = '%s%s' % (redirect_url, query_params)
     return HttpResponseRedirect (redirect_to)
 
-def mark_request_as_x(request, request_id, status_int, message_text, date_requested=None):
-	lead = get_object_or_404(Lead, pk=request_id)
-	lead.status = status_int
-	if date_requested:
-		lead.date_requested = date_requested
-	lead.save()
-	messages.success(request, message_text)	
-	return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 

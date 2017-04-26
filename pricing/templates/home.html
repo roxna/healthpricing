@@ -19,11 +19,16 @@
                             <div class="container">
                                 <h3 class="text white">Don't know what your treatment will cost?</h3><br>
                                 <h2 class="text white">Find out Now</h2>
+                                <div class="row">
                                     <form method="POST">
                                     {% csrf_token %}
                                         {% crispy search_form search_form.helper %}
                                         <!-- Search button in crispy_form layout --> 
                                     </form>
+                                </div><br>
+                                <div class="row">
+                                    <a href="{% url 'share_price' %}" class="btn btn-xlg btn-primary btn-outline">Or share your prices now!</a>
+                                </div>
                             </div>
                         </div>
                     </div>

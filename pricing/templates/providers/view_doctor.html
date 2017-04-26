@@ -37,24 +37,6 @@
 		                    
 		                    <div class="col-lg-3 col-md-3 col-sm-4">
 
-		                    	<div class="row margin-20 center">
-		                        	{% if user.is_authenticated and user.is_user %}
-
-		                        		{% is_doctor_in_user_reviews doctor user.user_profile as already_requested %}
-
-			                        		{% if not already_requested %}
-				                        		<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal">Request Appointment</button>
-				                        		{% include '_includes/modal_form.html' with form=lead_form title='Request Appointment' button='Request' form_name='lead_form' %}
-				                        	{% else %}
-				                        		<span class="text-muted"><em>Appointment requested</em></span>               	
-				                        	{% endif %}
-
-			                        {% elif not user.is_authenticated %}
-			                        	<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal">Request Appointment</button>
-			                        	{% include '_includes/modal_form.html' with form=login_form_appt title='You Must Log In First' button='Log In' form_name='login_form_appt' %}
-			                        {% endif %}
-		                        </div>
-
 		                        <div class="row margin-top-20">
 
 		                        	<div class="col-md-6 margin-bottom-20 center">

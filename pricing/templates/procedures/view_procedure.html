@@ -39,13 +39,8 @@
                     <div class="center">
                       <div class="text-muted margin-bottom-10">
                           Have an estimate of an <b>ALL CASH</b> (no insurance) price? <br><br>
-                          <button type="button" class="btn btn-danger btn-outline btn-lg" data-toggle="modal" data-target="#addModal">Please tell us!</button>
-                          
-                          {% if user.is_authenticated and user.is_user %}
-                            {% include '_includes/modal_form.html' with form=price_point_form title='Submit Price' button='Submit' form_name='price_point_form' %}
-                          {% elif not user.is_authenticated %}                        
-                            {% include '_includes/modal_form.html' with form=login_form title='You Must Log In First' button='Log In' form_name='login_form' %}
-                          {% endif %}
+                          <button type="button" class="btn btn-danger btn-outline btn-lg" data-toggle="modal" data-target="#addModal">Please tell us!</button>                          
+                          {% include '_includes/modal_form.html' with form=price_point_form title='Submit Price' button='Submit' form_name='price_point_form' %}
                       </div>
                     </div>
 
@@ -128,7 +123,7 @@
 
           </div>
 
-          {% include '_includes/doctor_related.html' with procedure=procedure %}
+          <!-- {#{% include '_includes/doctor_related.html' with procedure=procedure %}#} -->
 
       </div>
 
